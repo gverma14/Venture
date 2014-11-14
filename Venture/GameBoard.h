@@ -18,8 +18,11 @@
 //-(instancetype)initWith:(int)rowCount columnCount:(int)colCount;
 //
 -(NSArray *)getNeighboringTilesAtRow:(int)row column:(int)col;
--(NSDictionary *)findLengthOfNeighborsAtRow:(int)row column:(int)col;
+-(NSDictionary *)findLengthOfNeighbors:(GameBoardTile *)tile;
+
 -(void)changeNeighborsAtRow:(int)row column:(int)column toCompanyType:(int)companyType withPreviousTiles:(NSMutableArray *)previousTiles;
+
+
 
 
 -(GameBoardTile *)retrieveTileAtRow:(int)row column:(int)col;

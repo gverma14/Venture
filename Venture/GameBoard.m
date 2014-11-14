@@ -74,8 +74,11 @@
     
 }
 
--(NSDictionary *)findLengthOfNeighborsAtRow:(int)row column:(int)col
+-(NSDictionary *)findLengthOfNeighbors:(GameBoardTile *)tile
 {
+    int row = tile.row;
+    int col = tile.column;
+    
     NSNumber *top, *bottom, *left, *right;
     
     NSMutableArray *previousTiles = [[NSMutableArray alloc] init];
@@ -101,6 +104,69 @@
     return neighborLengths;
     
     
+    
+}
+
+
+-(void)placeTile:(GameBoardTile *)tile
+{
+    NSDictionary *neighborLengths = [self findLengthOfNeighbors:tile];
+    
+    //// Sorts the dictionary of lengths of neighboring chains and finds the highest chain key
+    NSString *highestChainKey = [self findHighestChainKey:neighborLengths];
+    
+    
+    /// Checks if the length of the highest chain is greater than zero
+    if (neighborLengths[highestChainKey] > 0) {
+        
+        
+        
+        
+        
+        
+    }
+    else {
+        
+    }
+    
+    
+    
+    
+    
+    
+}
+
+
+//// Given the dictionary of lengths, this returns the key for the highest neighbor chain length
+-(NSString *)findHighestChainKey:(NSDictionary *)neighborLengths
+{
+    
+    // Sorts the dictionary keys in terms of lowest to highest chain lengths
+    NSArray *sortedKeys = [neighborLengths keysSortedByValueUsingComparator:^NSComparisonResult(id object1, id object2) {
+        
+        NSNumber *obj1 = (NSNumber *) object1;
+        NSNumber *obj2 = (NSNumber *) object2;
+        
+        
+        if ([obj1 intValue] > [obj2 intValue]) {
+            return (NSComparisonResult)NSOrderedDescending;
+        }
+        
+        if ([obj1 intValue] < [obj2 intValue]) {
+            return (NSComparisonResult)NSOrderedAscending;
+        }
+        return (NSComparisonResult)NSOrderedSame;
+        
+        
+    }];
+    
+    
+    
+    
+    // Finds the highest key
+    NSString *highestKey = sortedKeys[3];
+    
+    return highestKey;
     
 }
 

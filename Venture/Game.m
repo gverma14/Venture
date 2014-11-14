@@ -163,6 +163,7 @@
         
     }
     
+    
     // check if the current placement tile exists
     if (oldPlacementTile) {
          
@@ -187,177 +188,174 @@
         GameBoardTile *tile = [self retrieveTileAtRow:row column:col];
         
          
-         // Makes sure the spot is empty
+         // Makes sure the spot is empty THIS IS JUST A SECONDARY CHECK
         if (tile.companyType == -1) {
-            
-            
-            
-            // Retrieve the lengths of chains neighboring the spot just selected
-            NSDictionary *neighborLengths = [self.board findLengthOfNeighborsAtRow:row column:col];
-            
-            
-            ///////// Debugging show the lengths of the neighbors
-            int topLength = [neighborLengths[@"top"] intValue];
-            int bottomLength = [neighborLengths[@"bottom"] intValue];
-            int leftLength = [neighborLengths[@"left"] intValue];
-            int rightLength = [neighborLengths[@"right"] intValue];
-            
-            NSLog(@"top:%d bottom:%d left:%d right:%d", topLength, bottomLength, leftLength, rightLength);
-            /////////
-            
-            
-            
-
-            // Sorts the dictionary keys in terms of lowest to highest chain lengths
-            NSArray *sortedKeys = [neighborLengths keysSortedByValueUsingComparator:^NSComparisonResult(id object1, id object2) {
-                
-                NSNumber *obj1 = (NSNumber *) object1;
-                NSNumber *obj2 = (NSNumber *) object2;
-                
-                
-                if ([obj1 intValue] > [obj2 intValue]) {
-                    return (NSComparisonResult)NSOrderedDescending;
-                }
-                
-                if ([obj1 intValue] < [obj2 intValue]) {
-                    return (NSComparisonResult)NSOrderedAscending;
-                }
-                return (NSComparisonResult)NSOrderedSame;
-            
-            
-            }];
-            
-            
-            // Finds the highest key
-            NSString *highestKey = sortedKeys[3];
-            
-            
-            
-            // Checks to see that at least one tile exists in a neighboring position else make its a neutral tile
-            if ([neighborLengths[highestKey]intValue] != 0) {
-                
-                
-                
-                // Retrieves all the locations where the chains are equal length
-                NSArray *allHighKeys = [neighborLengths allKeysForObject:neighborLengths[highestKey]];
-            
-            
-                NSMutableArray *highestNeighboringTiles = [[NSMutableArray alloc] init];
-                
-                // commit test
-                
-                
-                // loop through the all the neighboring keys that have the high number of chains
-                // perform some logic
-                for (NSString *highKey in allHighKeys) {
-                    
-                    GameBoardTile *highestNeighboringTile;
-                    
-                    if ([highKey isEqualToString:@"top"]) {
-                        highestNeighboringTile = [self.board retrieveTileAtRow:row-1 column:col];
-                    }
-                    else if ([highKey isEqualToString:@"bottom"]) {
-                        highestNeighboringTile = [self.board retrieveTileAtRow:row+1 column:col];
-                    }
-                    else if ([highKey isEqualToString:@"left"]) {
-                        highestNeighboringTile = [self.board retrieveTileAtRow:row column:col-1];
-                        
-                    }
-                    else if ([highKey isEqualToString:@"right"]) {
-                        highestNeighboringTile = [self.board retrieveTileAtRow:row column:col+1];
-                    }
-                    
-//                        if (highestNeighboringTile.companyType == 0 && [self.chainsInPlay count]) {
-//                            NSLog(@"changing company type");
-//                            
-//                            int index = [self generateRandomNumber:0 end:[self.chainsInPlay count]-1];
-//                            
-//                            
-//                            tile.companyType = [[self.chainsInPlay objectAtIndex:index] intValue];
-//                            
-//                            highestNeighboringTile.companyType = tile.companyType;
-//                            
-//                            [self.chainsInPlay removeObjectAtIndex:index];
-//                        }
-                    
-                    
-                    [highestNeighboringTiles addObject:highestNeighboringTile];
-                    
-                }
-                    
-                // set default tile value to zero
-                tile.companyType = 0;
-                
-                
-                // Check all the neighboring tiles and find the company type that matches the logic to apply
-                for (GameBoardTile *highestNeighboringTile in highestNeighboringTiles) {
-                    
-                    if (highestNeighboringTile.companyType > 0) {
-                        tile.companyType = highestNeighboringTile.companyType;
-                        break;
-                    }
-                    
-                    
-                }
-                
-                // If no company type is found generate a random company type
-                if (!tile.companyType) {
-                    //NSLog(@"changing company type");
-                    
-                    if ([self.chainsInPlay count]) {
-                        int index = [self generateRandomNumber:0 end:[self.chainsInPlay count]-1];
-                    
-                        NSLog(@"color %d", [[self.chainsInPlay objectAtIndex:index] intValue]);
-                        
-                        tile.companyType = [[self.chainsInPlay objectAtIndex:index] intValue];
-                    
-                        
-                        [self.chainsInPlay removeObjectAtIndex:index];
-                    }
-                    
-                }
-                
-                
-                NSMutableArray *previousTiles = [[NSMutableArray alloc] initWithObjects:tile, nil];
-                
-                [self.board changeNeighborsAtRow:row column:col toCompanyType:tile.companyType withPreviousTiles:previousTiles];
-                
-                
-                ///////////////////////
-                
-                    
-                
-            }
-            else {
-                tile.companyType = 0;
-                //NSLog(@"changing company type");
-                
-            }
-            
-            
+        
+            [self doSomething:tile];
             
         
-        
-            
         }
         
         
-        
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
 }
 
 
 
+-(void)doSomething:(GameBoardTile *)tile
+{
+    {
+        
+        
+        
+        // Retrieve the lengths of chains neighboring the spot just selected
+        NSDictionary *neighborLengths = [self.board findLengthOfNeighbors:tile];
+        
+        [self debugNeighborLengths:neighborLengths];
+        
+        
+        
+        
+        //// Sorts the dictionary of lengths of neighboring chains and finds the highest chain key
+        NSString *highestChainKey = [self findHighestChainKey:neighborLengths];
+        
+        
+        
+        // Checks to see that at least one tile exists in a neighboring position else make its a neutral tile checks the company type
+        if ([neighborLengths[highestChainKey]intValue] != 0) {
+            
+            
+            
+            // Retrieves all the locations where the chains are equal length
+            NSArray *allHighKeys = [neighborLengths allKeysForObject:neighborLengths[highestKey]];
+            NSMutableArray *highestNeighboringTiles = [[NSMutableArray alloc] init];
+            
+            
+            
+            // loop through the all the neighboring keys that have the high number of chains
+            // perform some logic
+            for (NSString *highKey in allHighKeys) {
+                
+                GameBoardTile *highestNeighboringTile;
+                
+                if ([highKey isEqualToString:@"top"]) {
+                    highestNeighboringTile = [self.board retrieveTileAtRow:row-1 column:col];
+                }
+                else if ([highKey isEqualToString:@"bottom"]) {
+                    highestNeighboringTile = [self.board retrieveTileAtRow:row+1 column:col];
+                }
+                else if ([highKey isEqualToString:@"left"]) {
+                    highestNeighboringTile = [self.board retrieveTileAtRow:row column:col-1];
+                    
+                }
+                else if ([highKey isEqualToString:@"right"]) {
+                    highestNeighboringTile = [self.board retrieveTileAtRow:row column:col+1];
+                }
+                
+                
+                [highestNeighboringTiles addObject:highestNeighboringTile];
+                
+            }
+            
+            // set default tile value to zero
+            tile.companyType = 0;
+            
+            
+            // Check all the neighboring tiles and find the company type that matches the logic to apply
+            for (GameBoardTile *highestNeighboringTile in highestNeighboringTiles) {
+                
+                if (highestNeighboringTile.companyType > 0) {
+                    tile.companyType = highestNeighboringTile.companyType;
+                    break;
+                }
+                
+                
+            }
+            
+            // If no company type is found generate a random company type
+            if (!tile.companyType) {
+                //NSLog(@"changing company type");
+                
+                if ([self.chainsInPlay count]) {
+                    int index = [self generateRandomNumber:0 end:[self.chainsInPlay count]-1];
+                    
+                    NSLog(@"color %d", [[self.chainsInPlay objectAtIndex:index] intValue]);
+                    
+                    tile.companyType = [[self.chainsInPlay objectAtIndex:index] intValue];
+                    
+                    
+                    [self.chainsInPlay removeObjectAtIndex:index];
+                }
+                
+            }
+            
+            
+            NSMutableArray *previousTiles = [[NSMutableArray alloc] initWithObjects:tile, nil];
+            
+            [self.board changeNeighborsAtRow:row column:col toCompanyType:tile.companyType withPreviousTiles:previousTiles];
+            
+        }
+        else {
+            tile.companyType = 0;
+            //NSLog(@"changing company type");
+            
+        }
+        
+    }
+}
+
+
+//// Given the dictionary of lengths, this returns the key for the highest neighbor chain length
+-(NSString *)findHighestChainKey:(NSDictionary *)neighborLengths
+{
+    
+    // Sorts the dictionary keys in terms of lowest to highest chain lengths
+    NSArray *sortedKeys = [neighborLengths keysSortedByValueUsingComparator:^NSComparisonResult(id object1, id object2) {
+        
+        NSNumber *obj1 = (NSNumber *) object1;
+        NSNumber *obj2 = (NSNumber *) object2;
+        
+        
+        if ([obj1 intValue] > [obj2 intValue]) {
+            return (NSComparisonResult)NSOrderedDescending;
+        }
+        
+        if ([obj1 intValue] < [obj2 intValue]) {
+            return (NSComparisonResult)NSOrderedAscending;
+        }
+        return (NSComparisonResult)NSOrderedSame;
+        
+        
+    }];
+    
+    
+    
+    
+    // Finds the highest key
+    NSString *highestKey = sortedKeys[3];
+    
+    return highestKey;
+    
+}
+
+
+
+
+-(void)debugNeighborLengths:(NSDictionary *)neighborLengths
+{
+
+    ///////// Debugging show the lengths of the neighbors
+    
+    int topLength = [neighborLengths[@"top"] intValue];
+    int bottomLength = [neighborLengths[@"bottom"] intValue];
+    int leftLength = [neighborLengths[@"left"] intValue];
+    int rightLength = [neighborLengths[@"right"] intValue];
+    
+    NSLog(@"top:%d bottom:%d left:%d right:%d", topLength, bottomLength, leftLength, rightLength);
+    /////////
+    
+}
 
 
 -(int) generateRandomNumber:(int)begin end:(int) end {
