@@ -39,8 +39,10 @@
 }
 
 
--(NSArray *)getNeighboringTilesAtRow:(int)row column:(int)col
+-(NSArray *)getNeighboringTiles:(GameBoardTile *)tile
 {
+    int row = tile.row;
+    int col = tile.column;
     
     GameBoardTile *top,*bottom,*left,*right;
     
@@ -81,6 +83,8 @@
     
     NSNumber *top, *bottom, *left, *right;
     
+    
+    
     NSMutableArray *previousTiles = [[NSMutableArray alloc] init];
     
     top = [NSNumber numberWithInt:[self findLengthOfChainAtRow:row-1 column:col withPreviousTiles:previousTiles]];
@@ -108,31 +112,75 @@
 }
 
 
--(void)placeTile:(GameBoardTile *)tile
+
+-(NSArray *)findHighestNeighboringTiles:(GameBoardTile *)tile
 {
+    int row = tile.row;
+    int col = tile.column;
+    
+    
     NSDictionary *neighborLengths = [self findLengthOfNeighbors:tile];
+    [self debugNeighborLengths:neighborLengths];
     
     //// Sorts the dictionary of lengths of neighboring chains and finds the highest chain key
     NSString *highestChainKey = [self findHighestChainKey:neighborLengths];
+    NSMutableArray *highestNeighboringTiles = [[NSMutableArray alloc] init];
     
     
     /// Checks if the length of the highest chain is greater than zero
-    if (neighborLengths[highestChainKey] > 0) {
+    if ([neighborLengths[highestChainKey]intValue] > 0) {
         
+        NSArray *allHighestChainKeys = [neighborLengths allKeysForObject:neighborLengths[highestChainKey]];
         
+        // loop through the all the neighboring keys that have the high number of chains
+        // perform some logic
+        for (NSString *oneHighestChainKey in allHighestChainKeys) {
+            
+            GameBoardTile *highestNeighboringTile;
+            
+            if ([oneHighestChainKey isEqualToString:@"top"]) {
+                highestNeighboringTile = [self retrieveTileAtRow:row-1 column:col];
+            }
+            else if ([oneHighestChainKey isEqualToString:@"bottom"]) {
+                highestNeighboringTile = [self retrieveTileAtRow:row+1 column:col];
+            }
+            else if ([oneHighestChainKey isEqualToString:@"left"]) {
+                highestNeighboringTile = [self retrieveTileAtRow:row column:col-1];
+                
+            }
+            else if ([oneHighestChainKey isEqualToString:@"right"]) {
+                highestNeighboringTile = [self retrieveTileAtRow:row column:col+1];
+            }
+            
+            
+        
+            [highestNeighboringTiles addObject:highestNeighboringTile];
+        
+            
+        }
         
         
         
         
     }
-    else {
-        
-    }
+    /// Else sets company type to neutral if all surrounding tiles are empty
     
+    return highestNeighboringTiles;
     
+}
+
+-(void)debugNeighborLengths:(NSDictionary *)neighborLengths
+{
     
+    ///////// Debugging show the lengths of the neighbors
     
+    int topLength = [neighborLengths[@"top"] intValue];
+    int bottomLength = [neighborLengths[@"bottom"] intValue];
+    int leftLength = [neighborLengths[@"left"] intValue];
+    int rightLength = [neighborLengths[@"right"] intValue];
     
+    NSLog(@"top:%d bottom:%d left:%d right:%d", topLength, bottomLength, leftLength, rightLength);
+    /////////
     
 }
 
@@ -171,17 +219,35 @@
 }
 
 
--(void)changeNeighborsAtRow:(int)row column:(int)column toCompanyType:(int)companyType withPreviousTiles:(NSMutableArray *)previousTiles
+// returns array of colors that were changed
+-(void)changeNeighborsOfTile:(GameBoardTile *)tile toCompanyType:(int)companyType withPreviousTiles:(NSMutableArray *)previousTiles withChangedCompanyTiles:(NSMutableArray *)changedCompanyTiles
 {
-    NSArray *neighbors = [self getNeighboringTilesAtRow:row column:column];
+    if (tile.companyType != companyType) {
+        tile.companyType = companyType;
+    }
+    NSArray *neighbors = [self getNeighboringTiles:tile];
     
-    for (GameBoardTile *tile in neighbors) {
+    if (![previousTiles containsObject:tile]) {
+        [previousTiles addObject:tile];
+    }
+    
+    
+    
+    for (GameBoardTile *neighborTile in neighbors) {
         
-        if (tile) {
-            if (tile.companyType >= 0 && ![previousTiles containsObject:tile]) {
-                tile.companyType = companyType;
-                [previousTiles addObject:tile];
-                [self changeNeighborsAtRow:tile.row column:tile.column toCompanyType:companyType withPreviousTiles:previousTiles];
+        if (neighborTile) {
+            if (neighborTile.companyType >= 0 && ![previousTiles containsObject:neighborTile]) {
+                
+                if (neighborTile.companyType != companyType) {
+                    NSNumber *companyNumber = [NSNumber numberWithInt:neighborTile.companyType];
+                    if (![changedCompanyTiles containsObject:companyNumber] && [companyNumber intValue] > 0) {
+                        [changedCompanyTiles addObject:companyNumber];
+                    }
+                }
+                
+                neighborTile.companyType = companyType;
+                [previousTiles addObject:neighborTile];
+                [self changeNeighborsOfTile:neighborTile toCompanyType:companyType withPreviousTiles: previousTiles withChangedCompanyTiles:changedCompanyTiles];
             }
             
         }
@@ -199,7 +265,7 @@
     
     
     if (thisTile) {
-        if (thisTile.companyType == -1 || [previousTiles containsObject:thisTile]) {
+        if (thisTile.companyType <= 0 || [previousTiles containsObject:thisTile]) {
             return 0;
         }
         else {
@@ -235,28 +301,7 @@
     
     return 0;
     
-    
-//    if (target.companyType == -1) {
-//        return 0;
-//    }
-//    else {
-//        NSArray *neighbors = target.neighboringTiles;
-//        int length = 1;
-//        
-//        for (id obj in neighbors) {
-//            if ([obj isKindOfClass:[GameBoardTile class]]) {
-//                GameBoardTile *neighboringTile = (GameBoardTile *)obj;
-//                if (neighboringTile != target) {
-//                    length += [self findLengthOfChainAtTile:neighboringTile fromSender:target];
-//
-//                }
-//                
-//                
-//                
-//            }
-//        }
-//        
-//    }
+
     
 }
 
