@@ -17,12 +17,15 @@
 - (void)replaceTileAtIndex:(int)index;
 @property (nonatomic) int placementTileCount;
 @property (nonatomic) int tilesPlayed;
--(GameBoardTile *)retrieveTileAtRow:(int)row column:(int)col;
--(void)chooseTileAtRow:(int)row column:(int)col;
+-(NSArray *) chooseTileAtRow:(int)row column:(int)col; ///Returns an array of the highest chain length neighboring tiles
+
+-(void)completeMergerWithTile:(GameBoardTile *)mergerTile fromTile:(GameBoardTile *)originTile;
+-(void)startCompanyAtTile:(GameBoardTile *)tile withCompanyType:(NSNumber *)companyType;
 
 @property (strong, nonatomic) GameBoard *board;
 @property (nonatomic) int numberRows;
 @property (nonatomic) int numberColumns;
+@property (strong, nonatomic) NSMutableArray *chainsInPlay;
 
 @end
 

@@ -118,7 +118,7 @@
     
     for (int row = 0; row < self.game.numberRows; row++) {
         for (int col = 0; col < self.game.numberColumns; col++) {
-            GameBoardTile *tile = [self.game retrieveTileAtRow:row column:col];
+            GameBoardTile *tile = [self.game.board retrieveTileAtRow:row column:col];
             
             int index = row*self.game.numberColumns+col;
             
@@ -157,11 +157,80 @@
             
             if (!gameTileView.isMarked) {
                 
-                [self.game chooseTileAtRow:row column:col];
+                NSArray *neighboringTiles = [self.game chooseTileAtRow:row column:col];
+                GameBoardTile *thisTile = [self.game.board retrieveTileAtRow:row column:col];
                 
-                
-               // NSLog(@"tapped");
-                
+                if (neighboringTiles) {
+                    NSMutableArray *changedCompanyTiles = [[NSMutableArray alloc] init];
+                    
+                    if ([neighboringTiles count] > 1) {
+                        //// need to pick merger
+                        
+                        
+                        ////// Pick which tile you are changing here, default right now is first tile
+                        GameBoardTile *changeTile = neighboringTiles[0];
+                        
+                        [self.game completeMergerWithTile:changeTile fromTile:thisTile];
+                        
+                        
+                    }
+                    else if ([neighboringTiles count] == 1) {
+                        //// need to pick color if the tile returned is the same as this tile
+                        
+                        GameBoardTile *neighboringTile = [neighboringTiles objectAtIndex:0];
+                        
+                        
+                        if ([neighboringTile isEqual:thisTile]) {
+                            /// need to pick color // user input here
+                            
+                            
+                            
+                            
+                            
+                            
+                            /////////////////////
+                            
+                            
+                            if ([self.game.chainsInPlay count]) {
+                                
+                                ///// choose color here
+                                
+                                
+                                [self.game startCompanyAtTile:thisTile withCompanyType:self.game.chainsInPlay[0]];
+                                
+                                
+                                
+                                
+                                
+                            }
+                            else {
+                                
+                                thisTile.companyType = 0;
+                            }
+                            
+                            
+                            
+                            
+                            
+                        }
+                        
+                    }
+                    
+                    for (id obj in changedCompanyTiles) {
+                        
+                        int company = [obj intValue];
+                        
+                        NSLog(@"Changed company %d", company);
+                        
+                        
+                    }
+                    
+                    
+                    
+                    
+                    
+                }
+               
                 
                 
                 

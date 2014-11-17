@@ -17,7 +17,7 @@
 -(void)drawRect:(CGRect)rect
 {
     [[UIColor whiteColor] setStroke];
-    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:10];
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:self.bounds.size.height/4];
     
     path.lineWidth = 3;
     [path stroke];
