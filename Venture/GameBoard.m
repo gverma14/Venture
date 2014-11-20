@@ -153,8 +153,19 @@
             }
             
             
-        
-            [highestNeighboringTiles addObject:highestNeighboringTile];
+            BOOL companyAlreadyFound = NO;
+            
+            for (GameBoardTile *existingTile in highestNeighboringTiles) {
+                if (existingTile.companyType == highestNeighboringTile.companyType) {
+                    companyAlreadyFound = YES;
+                    break;
+                }
+            }
+            
+            if (!companyAlreadyFound) {
+                [highestNeighboringTiles addObject:highestNeighboringTile];
+
+            }
         
             
         }

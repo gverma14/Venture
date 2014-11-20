@@ -23,4 +23,6 @@
 -(NSArray *)getNeighboringTiles:(GameBoardTile *)tile;
 -(NSArray *)findHighestNeighboringTiles:(GameBoardTile *)tile;
 -(void)changeNeighborsOfTile:(GameBoardTile *)tile toCompanyType:(int)companyType withPreviousTiles:(NSMutableArray *)previousTiles withChangedCompanyTiles:(NSMutableArray *)changedCompanyTiles;
+-(int)findLengthOfChainAtRow:(int)row column:(int)col withPreviousTiles:(NSMutableArray *)previousTiles;
+
 @end

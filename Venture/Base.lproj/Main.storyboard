@@ -76,11 +76,16 @@
                                 </attributedString>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zvx-Qh-TFB">
+                                <rect key="frame" x="20" y="428" width="280" height="120"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.64705882349999999" green="0.0" blue="0.12941176469999999" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="cr9-mr-mYF"/>
                     <connections>
+                        <outlet property="controlPanelView" destination="zvx-Qh-TFB" id="ovN-qy-pPq"/>
                         <outlet property="gameView" destination="hKo-8c-dxn" id="cxC-gd-B5r"/>
                     </connections>
                 </viewController>

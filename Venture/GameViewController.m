@@ -19,7 +19,9 @@
 @interface GameViewController ()
 @property (weak, nonatomic) IBOutlet UIView *gameView;
 @property (strong, nonatomic) Game *game;
-
+@property (weak, nonatomic) IBOutlet UIView *controlPanelView;
+@property (strong, nonatomic) Grid *controlPanelGrid;
+@property (strong, nonatomic) GameBoardTile *currentTileToBeChanged;
 @property (strong, nonatomic) Grid *gameGrid;
 //@property (strong, nonatomic) Grid *grid;
 
@@ -63,7 +65,19 @@
 
     [self layoutTiles];
     
-    //[self layoutPlacementTiles];
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -143,6 +157,153 @@
     
 }
 
+-(void)toggleTaps:(BOOL)activated{
+    for (GameBoardTileView *view in self.gameView.subviews) {
+        
+        view.userInteractionEnabled = activated;
+        
+        
+    }
+    
+}
+
+-(void)chooseCompanyTypeWithChains:(NSArray *)chainsInPlay
+{
+    NSLog(@"%d chains in play", [chainsInPlay count]);
+    
+    CGRect frame = self.controlPanelView.bounds;
+    frame.size.height /= 2;
+    
+    frame.origin.y = self.controlPanelView.bounds.size.height+20;
+    
+    UIView *selectionPalette = [[UIView alloc] initWithFrame:frame];
+    
+    //selectionPalette.backgroundColor = [UIColor orangeColor];
+    
+    [self.controlPanelView addSubview:selectionPalette];
+    selectionPalette.alpha = 0;
+    
+    
+    float buttonScaleFactor = .65;
+    
+    
+    CGRect buttonFrame = CGRectMake(0, 0, selectionPalette.frame.size.height*buttonScaleFactor, selectionPalette.frame.size.height*buttonScaleFactor);
+    
+    int totalButtons = [chainsInPlay count];
+    
+    for (int i = 1; i <= totalButtons; i++) {
+        GameBoardTileView *view = [[GameBoardTileView alloc] initWithFrame:buttonFrame];
+        view.companyType = [chainsInPlay[i-1] intValue];
+        view.empty = NO;
+        
+        
+        NSLog(@"%d company type", view.companyType);
+        
+        
+        float centerX = selectionPalette.frame.size.width/totalButtons/2*(2*i-1);
+        //view.strokeColor = [UIColor orangeColor];
+        view.center = CGPointMake(centerX, selectionPalette.frame.size.height/2);
+        //view.backgroundColor = [UIColor blackColor];
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sendCompanyTypeToModel:)];
+        
+        [view addGestureRecognizer:tapGesture];
+        
+        [selectionPalette addSubview:view];
+    }
+    
+    [UIView animateWithDuration:.25 delay:.5 options:UIViewAnimationOptionLayoutSubviews animations:^{
+        CGRect newFrame = selectionPalette.frame;
+        newFrame.origin.y = 0;
+        selectionPalette.frame = newFrame;
+        
+        selectionPalette.alpha = 1.0;
+    
+    
+    } completion:nil];
+    
+    [self toggleTaps:NO];
+    
+    
+    
+    
+}
+
+
+
+-(void)sendCompanyTypeToModel:(UITapGestureRecognizer *)gesture
+{
+    if (gesture.state == UIGestureRecognizerStateEnded) {
+        id view = gesture.view;
+        if ([view isKindOfClass:[GameBoardTileView class]]) {
+            GameBoardTileView *gameTileView = (GameBoardTileView *) view;
+            int companyType = gameTileView.companyType;
+            if (self.currentTileToBeChanged) {
+                
+                NSLog(@"Current company: %d New company %d", self.currentTileToBeChanged.companyType, companyType);
+                
+                [self.game startCompanyAtTile:self.currentTileToBeChanged withCompanyType:[NSNumber numberWithInt:companyType]];
+                [self updatePlaced];
+                self.currentTileToBeChanged = nil;
+                
+                
+                [UIView animateWithDuration:.25 delay:.25 options:UIViewAnimationOptionLayoutSubviews animations:^ {
+                    
+                    CGRect newFrame = gameTileView.superview.frame;
+                    
+                    newFrame.origin.y = self.controlPanelView.frame.size.height+20;
+                    gameTileView.superview.frame = newFrame;
+                    
+                    gameTileView.superview.alpha = 0.0;
+                
+                } completion:^(BOOL finished) {
+                    
+                    if (finished) {
+                        [gameTileView.superview removeFromSuperview];
+                    }
+                }];
+                
+                [self toggleTaps:YES];
+                 
+            }
+            
+        }
+        
+    }
+}
+
+
+-(void)chooseTileForMerger:(NSArray *)neighboringTiles
+{
+    for (GameBoardTile *tile in neighboringTiles) {
+        
+        NSMutableArray *previous = [[NSMutableArray alloc] initWithObjects:tile, nil];
+        [self.game.board findLengthOfChainAtRow:tile.row column:tile.column withPreviousTiles:previous];
+        
+        
+        for (GameBoardTile *chainTile in previous) {
+            
+            GameBoardTileView *view = [self retrieveGameBoardTileViewAtRow:chainTile.row col:chainTile.column];
+            
+            NSLog(@"row %d col %d", view.row, view.col);
+            //UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(completeMergerAction:)];
+            
+            //[view addGestureRecognizer:gesture];
+            
+            
+        }
+        
+        
+    }
+    
+    
+}
+
+
+-(void)completeMergerAction:(UITapGestureRecognizer *)gesture
+{
+    NSLog(@"tapped");
+    
+}
 
 -(void)tap:(UITapGestureRecognizer *)gesture
 {
@@ -168,9 +329,10 @@
                         
                         
                         ////// Pick which tile you are changing here, default right now is first tile
-                        GameBoardTile *changeTile = neighboringTiles[0];
                         
-                        [self.game completeMergerWithTile:changeTile fromTile:thisTile];
+                        [self chooseTileForMerger:neighboringTiles];
+                        
+                        //[self.game completeMergerWithTile:changeTile fromTile:thisTile];
                         
                         
                     }
@@ -195,8 +357,14 @@
                                 
                                 ///// choose color here
                                 
+                                NSArray *chainsInPlay = self.game.chainsInPlay;
+                                self.currentTileToBeChanged = neighboringTile;
+                                [self chooseCompanyTypeWithChains:chainsInPlay];
                                 
-                                [self.game startCompanyAtTile:thisTile withCompanyType:self.game.chainsInPlay[0]];
+                                
+                                
+                                
+                                //[self.game startCompanyAtTile:thisTile withCompanyType:self.game.chainsInPlay[0]];
                                 
                                 
                                 
@@ -274,7 +442,17 @@
 }
 
 
-
+-(Grid *)controlPanelGrid
+{
+    if (!_controlPanelGrid) {
+        _controlPanelGrid = [[Grid alloc] init];
+        _controlPanelGrid.size = self.controlPanelView.frame.size;
+        _controlPanelGrid.cellAspectRatio = self.controlPanelView.frame.size.width/self.controlPanelView.frame.size.height;
+        _controlPanelGrid.minimumNumberOfCells = 2;
+    }
+    
+    return _controlPanelGrid;
+}
 
 -(Grid *)gameGrid
 {
