@@ -19,7 +19,7 @@
 @property (nonatomic) int tilesPlayed;
 -(NSArray *) chooseTileAtRow:(int)row column:(int)col; ///Returns an array of the highest chain length neighboring tiles
 
--(void)completeMergerWithTile:(GameBoardTile *)mergerTile fromTile:(GameBoardTile *)originTile;
+-(void)completeMergerWithTile:(GameBoardTile *)mergerTile;
 -(void)startCompanyAtTile:(GameBoardTile *)tile withCompanyType:(NSNumber *)companyType;
 
 @property (strong, nonatomic) GameBoard *board;

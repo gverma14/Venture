@@ -251,7 +251,7 @@
 
 
 
--(void)completeMergerWithTile:(GameBoardTile *)mergerTile fromTile:(GameBoardTile *)originTile
+-(void)completeMergerWithTile:(GameBoardTile *)mergerTile
 {
     
     

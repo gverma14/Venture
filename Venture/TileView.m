@@ -14,6 +14,20 @@ const double markerScaleFactor =.65; //  points height per pointSize
 
 @implementation TileView
 
+
+-(int)lineWidth
+{
+    if (!_lineWidth) {
+        _lineWidth = 3;
+        
+        
+        
+    }
+    
+    return _lineWidth;
+    
+}
+
 -(UIColor *)fillColor
 {
     if (!_fillColor) {
@@ -129,7 +143,7 @@ const double markerScaleFactor =.65; //  points height per pointSize
     
     
     UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:self.bounds.size.height/4];
-    path.lineWidth = 3;
+    path.lineWidth = self.lineWidth;
     [path addClip];
     
     if (self.isEmpty) {
@@ -202,12 +216,15 @@ const double markerScaleFactor =.65; //  points height per pointSize
     NSTimeInterval timedelay =0;
     double duration = .25;
     
+    
+    
+    
     if (self.isMarked) {
         option = UIViewAnimationOptionTransitionFlipFromLeft;
         timedelay = duration;
         //duration = 1;
     }
-    if (!self.isEmpty) {
+    if (!self.isEmpty && self.defaultAnimationMode) {
         option = UIViewAnimationOptionTransitionFlipFromBottom;
     }
     

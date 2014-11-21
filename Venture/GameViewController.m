@@ -23,6 +23,7 @@
 @property (strong, nonatomic) Grid *controlPanelGrid;
 @property (strong, nonatomic) GameBoardTile *currentTileToBeChanged;
 @property (strong, nonatomic) Grid *gameGrid;
+
 //@property (strong, nonatomic) Grid *grid;
 
 @property (nonatomic) double tileScaleFactor;
@@ -147,6 +148,8 @@
                     view.companyType = tile.companyType;
                 }
                 
+                
+                
                 //NSLog(@"%d index", index);
             }
             
@@ -221,7 +224,8 @@
     
     } completion:nil];
     
-    [self toggleTaps:NO];
+    
+    
     
     
     
@@ -262,6 +266,7 @@
                     }
                 }];
                 
+                
                 [self toggleTaps:YES];
                  
             }
@@ -276,21 +281,121 @@
 {
     for (GameBoardTile *tile in neighboringTiles) {
         
-        NSMutableArray *previous = [[NSMutableArray alloc] initWithObjects:tile, nil];
+        NSMutableArray *previous = [[NSMutableArray alloc] init];
         [self.game.board findLengthOfChainAtRow:tile.row column:tile.column withPreviousTiles:previous];
+        
+        NSLog(@"Number of tiles in chain %d", [previous count]);
+        
+        
         
         
         for (GameBoardTile *chainTile in previous) {
             
             GameBoardTileView *view = [self retrieveGameBoardTileViewAtRow:chainTile.row col:chainTile.column];
             
-            NSLog(@"row %d col %d", view.row, view.col);
-            //UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(completeMergerAction:)];
+            //NSLog(@"row %d col %d", view.row, view.col);
+            UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(completeMergerAction:)];
             
-            //[view addGestureRecognizer:gesture];
+            [view addGestureRecognizer:gesture];
+            
+            view.userInteractionEnabled = YES;
+            
+            UIViewAnimationOptions options = UIViewAnimationOptionAutoreverse | UIViewAnimationOptionRepeat | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionTransitionCrossDissolve;
+            
+            
+            [UIView transitionWithView:view duration:1 options:options animations:^{
+                view.transform = CGAffineTransformMakeScale(1/self.tileScaleFactor, 1/self.tileScaleFactor);
+                view.strokeColor = [UIColor whiteColor];
+                view.lineWidth = 6;
+                view.defaultAnimationMode = NO;
+                [view setNeedsDisplay];
+            }completion:^(BOOL finished) {
+                
+                if (finished) {
+                    NSLog(@"finished");
+                }
+                
+                
+                
+                
+            }];
+//            [UIView animateWithDuration:1 delay:0 options:options animations:^{
+//                
+//                view.transform = CGAffineTransformMakeScale(1.05, 1.05);
+//                view.strokeColor = [UIColor whiteColor];
+//                view.lineWidth = 10;
+//                view.defaultAnimationMode = NO;
+//                [view setNeedsDisplay];
+//                
+//                
+//            } completion:nil];
+            
             
             
         }
+        
+        
+        
+        
+        
+    }
+    
+    
+    
+    
+}
+
+
+-(void)stopAllAnimation
+{
+    for (GameBoardTileView *view in self.gameView.subviews) {
+        
+        
+        [UIView animateWithDuration:.25 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+            
+            
+            
+            view.transform = CGAffineTransformIdentity;
+            
+            if (!view.defaultAnimationMode) {
+                view.defaultAnimationMode = YES;
+                view.strokeColor = [UIColor clearColor];
+                view.lineWidth = 3;
+                [view setNeedsDisplay];
+            }
+        
+        
+        
+        } completion:^(BOOL finished){
+                if (finished) {
+                    [view.layer removeAllAnimations];
+                    
+                }
+            
+            }];
+        
+        
+//        [UIView transitionWithView:view duration:.25 options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionBeginFromCurrentState animations:^ {
+//            
+//            view.transform = CGAffineTransformIdentity;
+//            if (!view.defaultAnimationMode) {
+//                view.defaultAnimationMode = YES;
+//                view.strokeColor = [UIColor clearColor];
+//                view.lineWidth = 3;
+//                
+//                [view setNeedsDisplay];
+//                
+//                
+//            }
+//            
+//            
+//        }completion:^(BOOL finished) {
+//            if (finished) {
+//                [view.layer removeAllAnimations];
+//                
+//            }
+//        }];
+        
         
         
     }
@@ -298,10 +403,24 @@
     
 }
 
-
 -(void)completeMergerAction:(UITapGestureRecognizer *)gesture
 {
     NSLog(@"tapped");
+    
+    [self stopAllAnimation];
+    GameBoardTileView *view = (GameBoardTileView *) gesture.view;
+    
+    
+    GameBoardTile *tile = [self.game.board retrieveTileAtRow:view.row column:view.col];
+    
+    [self.game completeMergerWithTile:tile];
+    
+    [self updatePlaced];
+    
+    [self toggleTaps:YES];
+    
+    
+    
     
 }
 
@@ -329,7 +448,7 @@
                         
                         
                         ////// Pick which tile you are changing here, default right now is first tile
-                        
+                        [self toggleTaps:NO];
                         [self chooseTileForMerger:neighboringTiles];
                         
                         //[self.game completeMergerWithTile:changeTile fromTile:thisTile];
@@ -359,6 +478,8 @@
                                 
                                 NSArray *chainsInPlay = self.game.chainsInPlay;
                                 self.currentTileToBeChanged = neighboringTile;
+                                
+                                [self toggleTaps:NO];
                                 [self chooseCompanyTypeWithChains:chainsInPlay];
                                 
                                 
@@ -479,6 +600,7 @@
                 CGRect frame = [grid frameOfCellAtRow:0 inColumn:0];
                 frame.size = CGSizeMake(frame.size.width*self.tileScaleFactor, frame.size.height*self.tileScaleFactor);
                 GameBoardTileView *tile = [[GameBoardTileView alloc] initWithFrame:frame];
+                tile.defaultAnimationMode = YES;
                 tile.center = [grid centerOfCellAtRow:row inColumn:col];
                 tile.row = row;
                 tile.col = col;

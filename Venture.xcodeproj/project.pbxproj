@@ -21,7 +21,6 @@
 		FC08D80319F024AD0085D4A9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FC08D80119F024AD0085D4A9 /* InfoPlist.strings */; };
 		FC08D80519F024AD0085D4A9 /* VentureTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FC08D80419F024AD0085D4A9 /* VentureTests.m */; };
 		FC08D80F19F028040085D4A9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC08D80E19F028040085D4A9 /* Images.xcassets */; };
-		FC278F1D1A12E0A00045CB1B /* Ventureicon.png in Resources */ = {isa = PBXBuildFile; fileRef = FC278F1C1A12E0A00045CB1B /* Ventureicon.png */; };
 		FC2A19A019F99B78009A52C0 /* MainMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = FC2A199F19F99B78009A52C0 /* MainMenuButton.m */; };
 		FC2A19A319F9B42C009A52C0 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC2A19A219F9B42C009A52C0 /* GameViewController.m */; };
 		FC2A19A619F9B8A5009A52C0 /* Grid.m in Sources */ = {isa = PBXBuildFile; fileRef = FC2A19A519F9B8A5009A52C0 /* Grid.m */; };
@@ -64,7 +63,6 @@
 		FC08D80219F024AD0085D4A9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		FC08D80419F024AD0085D4A9 /* VentureTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VentureTests.m; sourceTree = "<group>"; };
 		FC08D80E19F028040085D4A9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		FC278F1C1A12E0A00045CB1B /* Ventureicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Ventureicon.png; sourceTree = "<group>"; };
 		FC2A199E19F99B78009A52C0 /* MainMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuButton.h; sourceTree = "<group>"; };
 		FC2A199F19F99B78009A52C0 /* MainMenuButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenuButton.m; sourceTree = "<group>"; };
 		FC2A19A119F9B42C009A52C0 /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
@@ -201,7 +199,6 @@
 				FC2C160F1A02FEC800618EE7 /* Game.m */,
 				FC99CBD71A0DACC200F38284 /* GameBoard.h */,
 				FC99CBD81A0DACC200F38284 /* GameBoard.m */,
-				FC278F1C1A12E0A00045CB1B /* Ventureicon.png */,
 				FC99CBD41A0DAA5D00F38284 /* GameBoardTile.h */,
 				FC99CBD51A0DAA5D00F38284 /* GameBoardTile.m */,
 				FC2C16121A02FFC700618EE7 /* PlacementTile.h */,
@@ -298,7 +295,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC278F1D1A12E0A00045CB1B /* Ventureicon.png in Resources */,
 				FC08D80F19F028040085D4A9 /* Images.xcassets in Resources */,
 				FC08D7E419F024AD0085D4A9 /* InfoPlist.strings in Resources */,
 				FC08D7ED19F024AD0085D4A9 /* Main.storyboard in Resources */,

@@ -16,11 +16,13 @@
 @property (nonatomic, getter = isMarked) BOOL marked;
 
 @property (nonatomic, strong) NSString *marker;
+@property (nonatomic) int lineWidth;
 
 @property (nonatomic, strong) UIColor *fillColor;
 @property (nonatomic, strong) UIColor *strokeColor;
 @property (nonatomic, strong) UIColor *emptyFillColor;
 @property (nonatomic, strong) UIColor *emptyStrokeColor;
+@property (nonatomic) BOOL defaultAnimationMode;
 - (void)drawMarker;
 -(void)addContents;
 -(void)saveContext;
