@@ -7,34 +7,53 @@
 //
 
 #import "Game.h"
-#import "PlacementTile.h"
-#import "PlacementTileBox.h"
+
 
 @interface Game()
 
-@property (strong, nonatomic) PlacementTileBox *tileBox;
+
 
 
 @end
 
 
+static const int chainsPossible = 7;
+
+
+
 @implementation Game
 
--(instancetype)init
+-(instancetype)initWithPlayerCount:(int)nPlayers
 {
     self = [super init];
 
+    for (int i = 0 ; i < nPlayers; i++) {
+        Player *player = [[Player alloc] initWithCompanies:chainsPossible tileBox:self.tileBox];
+        [self.players addObject:player];
+    }
     
     return self;
     
 }
+
+
+-(NSMutableArray *)players
+{
+    if (!_players) {
+        _players =  [[NSMutableArray alloc] init];
+        
+    }
+    return _players;
+    
+}
+
 
 -(NSMutableArray *)chainsInPlay
 {
     if (!_chainsInPlay) {
         _chainsInPlay = [[NSMutableArray alloc] init];
         
-        for (int i = 1; i <= 7; i++) {
+        for (int i = 1; i <= chainsPossible; i++) {
             NSNumber *num = [NSNumber numberWithInt:i];
             [_chainsInPlay addObject:num];
             
@@ -54,20 +73,6 @@
 }
 
 
--(int)tileCount
-{
-    if (!_tileCount) {
-        _tileCount = [self.tileBox tilesLeft];
-    }
-    
-    return _tileCount;
-    
-}
-
--(int)placementTileCount
-{
-    return 6;
-}
 
 
 -(int)numberColumns
@@ -91,66 +96,21 @@
 }
 
 
--(NSMutableArray *)placementTileStack
-{
-    if (!_placementTileStack) {
-        _placementTileStack = [[NSMutableArray alloc] init];
-        
-        
-        for (int i = 0 ; i < self.placementTileCount; i++) {
-            PlacementTile *placementTile = [self.tileBox drawRandomTile];
-            
-            [_placementTileStack addObject:placementTile];
-            
-        }
-        
-        
-    }
-    
-    
-    return _placementTileStack;
-}
-
-
-
-
-- (void)replaceTileAtIndex:(int)index
-{
-    if (index < [self.placementTileStack count]) {
-        if ([self.placementTileStack objectAtIndex:index]) {
-            [self.placementTileStack removeObjectAtIndex:index];
-            PlacementTile *placementTile = [self.tileBox drawRandomTile];
-            if (placementTile) {
-                [self.placementTileStack insertObject:placementTile atIndex:index];
-            }
-        }
-    }
-    
-
-
-    
-}
-
-
-
-
-
-
-
 
 ///// Returns nil if there are all empty tiles neighboring
 ///// Returns array of neighboring tiles if merger is needed
 ///// Returns array of one tile if there is only one highest chain tile
 ///// Returns array of the same tile if there are only neutral tiles surrounding and a color is needed
 
--(NSArray *)chooseTileAtRow:(int)row column:(int)col
+-(NSArray *)chooseTileAtRow:(int)row column:(int)col forPlayer:(Player *)player
 {
+    
     
     
     PlacementTile *oldPlacementTile = nil;
     
     //Finds the matching placement tile at the recently selected gameboard tile
-    for (PlacementTile *placementTile in self.placementTileStack) {
+    for (PlacementTile *placementTile in player.placementTileStack) {
         
         if (row == placementTile.row && col == placementTile.col) {
             oldPlacementTile = placementTile;
@@ -166,18 +126,27 @@
          
          
         
-        int index = [self.placementTileStack indexOfObject:oldPlacementTile];
+//        int index = [player.placementTileStack indexOfObject:oldPlacementTile];
+//        
+//        
+//        
+//         //Checks if the placement tile exists at that row col selected and draws a new placement tile
+//        if ([player.placementTileStack objectAtIndex:index]) {
+//            
+//            //// replace placement tile at that index for the player
+//            
+////            [player.placementTileStack removeObjectAtIndex:index];
+////            PlacementTile *newPlacementTile = [self.tileBox drawRandomTile];
+////            if (newPlacementTile) {
+////                [self.placementTileStack insertObject:newPlacementTile atIndex:index];
+////            }
+//        }
         
         
+        /// replaces players placement tile
+        [player replacePlacementTile:oldPlacementTile fromTileBox:self.tileBox];
         
-         //Checks if the placement tile exists at that row col selected and draws a new placement tile
-        if ([self.placementTileStack objectAtIndex:index]) {
-            [self.placementTileStack removeObjectAtIndex:index];
-            PlacementTile *newPlacementTile = [self.tileBox drawRandomTile];
-            if (newPlacementTile) {
-                [self.placementTileStack insertObject:newPlacementTile atIndex:index];
-            }
-        }
+        
         
         /////////////////////////////////////////////////////
         
@@ -192,7 +161,7 @@
             
             tile.companyType = 0;
             
-            NSLog(@"%d neighboring tile count", [highestNeighboringTiles count]);
+            //NSLog(@"%d neighboring tile count", [highestNeighboringTiles count]);
             
             // makes sure there is only one highest chain and makes all the other tiles merged into that
             if ([highestNeighboringTiles count] == 1) {
@@ -292,6 +261,32 @@
     
 }
 
+
+
+
+
+
+
+//
+//-(NSMutableArray *)placementTileStack
+//{
+//    if (!_placementTileStack) {
+//        _placementTileStack = [[NSMutableArray alloc] init];
+//
+//
+//        for (int i = 0 ; i < self.placementTileCount; i++) {
+//            PlacementTile *placementTile = [self.tileBox drawRandomTile];
+//
+//            [_placementTileStack addObject:placementTile];
+//
+//        }
+//
+//
+//    }
+//
+//
+//    return _placementTileStack;
+//}
 
 
 

@@ -9,25 +9,44 @@
 #import <Foundation/Foundation.h>
 #import "GameBoardTile.h"
 #import "GameBoard.h"
+#import "Player.h"
+#import "Market.h"
+#import "PlacementTile.h"
+#import "PlacementTileBox.h"
 
 @interface Game : NSObject
 
-@property (strong, nonatomic) NSMutableArray *placementTileStack;
-@property (nonatomic) int tileCount;
-- (void)replaceTileAtIndex:(int)index;
-@property (nonatomic) int placementTileCount;
-@property (nonatomic) int tilesPlayed;
--(NSArray *) chooseTileAtRow:(int)row column:(int)col; ///Returns an array of the highest chain length neighboring tiles
 
+-(instancetype)initWithPlayerCount:(int)nPlayers;
+
+// Tile Box properties
+@property (strong, nonatomic) PlacementTileBox *tileBox;
+
+/// Game board actions
 -(void)completeMergerWithTile:(GameBoardTile *)mergerTile;
 -(void)startCompanyAtTile:(GameBoardTile *)tile withCompanyType:(NSNumber *)companyType;
+-(NSArray *) chooseTileAtRow:(int)row column:(int)col forPlayer:(Player *)player; ///Returns an array of the highest chain length neighboring tiles
 
+
+
+// Game board properties
 @property (strong, nonatomic) GameBoard *board;
 @property (nonatomic) int numberRows;
 @property (nonatomic) int numberColumns;
 @property (strong, nonatomic) NSMutableArray *chainsInPlay;
+@property (nonatomic) int tilesPlayed;
+
+
+// Gameplay properties
+@property (nonatomic, strong) NSMutableArray *players;
+@property (nonatomic, strong) Market *market;
+
 
 @end
+
+
+
+
 
 
 

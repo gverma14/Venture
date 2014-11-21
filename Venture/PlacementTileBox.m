@@ -46,6 +46,11 @@
     return [self.placementTiles count];
 }
 
+-(int)maxPlacementTiles
+{
+    return 108;
+}
+
 
 - (PlacementTile *) drawRandomTile;
 {

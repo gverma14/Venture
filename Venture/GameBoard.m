@@ -184,13 +184,13 @@
 {
     
     ///////// Debugging show the lengths of the neighbors
-    
-    int topLength = [neighborLengths[@"top"] intValue];
-    int bottomLength = [neighborLengths[@"bottom"] intValue];
-    int leftLength = [neighborLengths[@"left"] intValue];
-    int rightLength = [neighborLengths[@"right"] intValue];
-    
-    NSLog(@"top:%d bottom:%d left:%d right:%d", topLength, bottomLength, leftLength, rightLength);
+//    
+//    int topLength = [neighborLengths[@"top"] intValue];
+//    int bottomLength = [neighborLengths[@"bottom"] intValue];
+//    int leftLength = [neighborLengths[@"left"] intValue];
+//    int rightLength = [neighborLengths[@"right"] intValue];
+//    
+    //NSLog(@"top:%d bottom:%d left:%d right:%d", topLength, bottomLength, leftLength, rightLength);
     /////////
     
 }

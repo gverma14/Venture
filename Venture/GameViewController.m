@@ -13,6 +13,10 @@
 #import "PlacementTile.h"
 #import "GameBoardTileView.h"
 #import "GameBoardTile.h"
+#import "Player.h"
+#import "MainMenuButton.h"
+
+
 
 
 
@@ -23,6 +27,8 @@
 @property (strong, nonatomic) Grid *controlPanelGrid;
 @property (strong, nonatomic) GameBoardTile *currentTileToBeChanged;
 @property (strong, nonatomic) Grid *gameGrid;
+@property (strong, nonatomic) Player *currentPlayer;
+@property (strong, nonatomic) UILabel *playerLabel;
 
 //@property (strong, nonatomic) Grid *grid;
 
@@ -32,21 +38,12 @@
 @end
 @implementation GameViewController
 
+const int playerCount = 4;
 
 
 //const int tileCount = 108;
 //const int placementTileCount = 6;
 
-
--(Game *)game
-{
-    if (!_game) {
-        _game = [[Game alloc] init];
-        
-    }
-    
-    return _game;
-}
 
 
 
@@ -61,28 +58,68 @@
 }
 
 
+-(Game *)game
+{
+    if (!_game) {
+        
+        _game = [[Game alloc] initWithPlayerCount:playerCount];
+        
+    }
+    return _game;
+}
+
 -(void)viewDidLoad
 {
 
     [self layoutTiles];
+    [self updatePlayerLabel];
     
     
+}
+
+-(void)updatePlayerLabel
+{
+    if (self.currentPlayer) {
+        self.playerLabel.text = [NSString stringWithFormat:@"Player %d", [self.game.players indexOfObject:self.currentPlayer]+1];
+    }
+    else {
+        self.playerLabel.text = @"Player";
+    }
+}
+
+
+-(UILabel *)playerLabel
+{
+    if (!_playerLabel) {
+        
+        CGRect labelFrame = self.controlPanelView.bounds;
+        
+        labelFrame.size.height /= 4;
+        labelFrame.size.width /= 2;
+        
+        
+        
+        
+        _playerLabel = [[UILabel alloc] initWithFrame:labelFrame];
+        _playerLabel.center = CGPointMake(self.controlPanelView.frame.size.width/2, self.controlPanelView.frame.size.height-labelFrame.size.height);
+        
+        //_playerLabel.backgroundColor = [UIColor orangeColor];
+        if (self.currentPlayer) {
+            _playerLabel.text = [NSString stringWithFormat:@"Player %d", [self.game.players indexOfObject:self.currentPlayer]+1];
+        }
+        else {
+            _playerLabel.text = @"Player";
+        }
+        _playerLabel.textAlignment = NSTextAlignmentCenter;
+        _playerLabel.textColor = [UIColor whiteColor];
+        
+        [self.controlPanelView addSubview:_playerLabel];
+        
+        
+        
+    }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    return _playerLabel;
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -90,14 +127,35 @@
     [self updateMarks];
     
     [self updatePlaced];
+
     
+}
+
+-(Player *)currentPlayer
+{
+    if (!_currentPlayer) {
+        
+        NSArray *players = self.game.players;
+        
+        if (players) {
+            
+            _currentPlayer = players[0];
+            
+        }
+        
+        
+    }
+    
+    return _currentPlayer;
 }
 
 
 
 -(void)updateMarks
 {
-    NSArray *stack = self.game.placementTileStack;
+    
+    NSArray *stack = self.currentPlayer.placementTileStack;
+    
     for (id obj in stack) {
         if ([obj isKindOfClass:[PlacementTile class]]) {
             PlacementTile *tile = (PlacementTile *)obj;
@@ -122,6 +180,19 @@
              
             
         }
+    }
+    
+}
+
+-(void)eraseAllMarks
+{
+    for (GameBoardTileView *view in self.gameView.subviews) {
+        
+        if (view.isMarked) {
+            [self toggleGameTileAt:view.row col:view.col];
+        }
+        
+        
     }
     
 }
@@ -172,7 +243,6 @@
 
 -(void)chooseCompanyTypeWithChains:(NSArray *)chainsInPlay
 {
-    NSLog(@"%d chains in play", [chainsInPlay count]);
     
     CGRect frame = self.controlPanelView.bounds;
     frame.size.height /= 2;
@@ -200,7 +270,6 @@
         view.empty = NO;
         
         
-        NSLog(@"%d company type", view.companyType);
         
         
         float centerX = selectionPalette.frame.size.width/totalButtons/2*(2*i-1);
@@ -243,7 +312,7 @@
             int companyType = gameTileView.companyType;
             if (self.currentTileToBeChanged) {
                 
-                NSLog(@"Current company: %d New company %d", self.currentTileToBeChanged.companyType, companyType);
+                
                 
                 [self.game startCompanyAtTile:self.currentTileToBeChanged withCompanyType:[NSNumber numberWithInt:companyType]];
                 [self updatePlaced];
@@ -263,15 +332,18 @@
                     
                     if (finished) {
                         [gameTileView.superview removeFromSuperview];
+                        
                     }
                 }];
                 
+                [self toggleNextPlayer];
                 
-                [self toggleTaps:YES];
                  
             }
             
+            
         }
+        
         
     }
 }
@@ -284,7 +356,6 @@
         NSMutableArray *previous = [[NSMutableArray alloc] init];
         [self.game.board findLengthOfChainAtRow:tile.row column:tile.column withPreviousTiles:previous];
         
-        NSLog(@"Number of tiles in chain %d", [previous count]);
         
         
         
@@ -375,28 +446,6 @@
             }];
         
         
-//        [UIView transitionWithView:view duration:.25 options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionBeginFromCurrentState animations:^ {
-//            
-//            view.transform = CGAffineTransformIdentity;
-//            if (!view.defaultAnimationMode) {
-//                view.defaultAnimationMode = YES;
-//                view.strokeColor = [UIColor clearColor];
-//                view.lineWidth = 3;
-//                
-//                [view setNeedsDisplay];
-//                
-//                
-//            }
-//            
-//            
-//        }completion:^(BOOL finished) {
-//            if (finished) {
-//                [view.layer removeAllAnimations];
-//                
-//            }
-//        }];
-        
-        
         
     }
     
@@ -417,11 +466,105 @@
     
     [self updatePlaced];
     
+    
+    
+    [self toggleNextPlayer];
+    
+    
+}
+
+
+-(void)toggleNextPlayer
+{
+    CGRect controlFrame = self.controlPanelView.bounds;
+    
+    CGSize buttonSize = CGSizeMake(controlFrame.size.width/2, controlFrame.size.height/4);
+    
+    CGRect buttonFrame = CGRectMake(0, 0, buttonSize.width, buttonSize.height);
+    
+    
+    MainMenuButton *button = [[MainMenuButton alloc] initWithFrame:buttonFrame];
+    
+    
+    [button setTitle:@"Next Player" forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    
+    [button addTarget:self action:@selector(nextPlayerButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    button.alpha = 0;
+    button.center = CGPointMake(controlFrame.size.width/2, controlFrame.size.height+20+button.frame.size.height/2);
+    
+    [self.controlPanelView addSubview:button];
+    
+    [UIView animateWithDuration:.25 delay:.75 options:UIViewAnimationOptionLayoutSubviews animations:^{
+        button.alpha = 1.0;
+        button.center = CGPointMake(controlFrame.size.width/2, buttonFrame.size.height/2);
+        
+    }completion:nil];
+    NSLog(@"activating button");
+    
+    [self toggleTaps:NO];
+    
+}
+
+-(void)nextPlayerButtonPressed:(id)sender
+{
+    
+    UIButton *button = (UIButton *)sender;
+    
+    [UIView animateWithDuration:.25 delay:0 options:UIViewAnimationOptionLayoutSubviews animations:^{
+        
+        button.alpha = 0;
+        button.center = CGPointMake(self.controlPanelView.frame.size.width/2, self.controlPanelView.frame.size.height+20+button.frame.size.height/2);
+    }completion:^(BOOL finished) {
+        if (finished) {
+            [button removeFromSuperview];
+            
+            
+            int playerIndex = [self.game.players indexOfObject:self.currentPlayer];
+            
+            if (playerIndex == [self.game.players count] -1) {
+                self.currentPlayer = self.game.players[0];
+            }
+            else {
+                self.currentPlayer = self.game.players[playerIndex+1];
+            }
+            
+            [self eraseAllMarks];
+            
+            [self performSelector:@selector(flipPlayerView) withObject:self afterDelay:.25];
+            
+            
+            
+            
+            //
+            //    [UIView transitionWithView:self.view duration:1 options:UIViewAnimationOptionTransitionFlipFromRight animations:^{  self.view.alpha = 1.0;  } completion:nil];
+            
+            
+        }
+    }];
+    
     [self toggleTaps:YES];
     
     
     
     
+}
+
+-(void)flipPlayerView
+{
+    [UIView transitionWithView:self.view duration:1 options:UIViewAnimationOptionTransitionFlipFromRight animations:^{
+        
+        [self updatePlayerLabel];
+        
+        
+        
+    }completion:^(BOOL finished) {
+        if (finished) {
+            [self updateMarks];
+            
+        }
+    }];
 }
 
 -(void)tap:(UITapGestureRecognizer *)gesture
@@ -437,11 +580,10 @@
             
             if (!gameTileView.isMarked) {
                 
-                NSArray *neighboringTiles = [self.game chooseTileAtRow:row column:col];
+                NSArray *neighboringTiles = [self.game chooseTileAtRow:row column:col forPlayer:self.currentPlayer];
                 GameBoardTile *thisTile = [self.game.board retrieveTileAtRow:row column:col];
                 
                 if (neighboringTiles) {
-                    NSMutableArray *changedCompanyTiles = [[NSMutableArray alloc] init];
                     
                     if ([neighboringTiles count] > 1) {
                         //// need to pick merger
@@ -495,6 +637,7 @@
                             else {
                                 
                                 thisTile.companyType = 0;
+                                [self toggleNextPlayer];
                             }
                             
                             
@@ -505,19 +648,15 @@
                         
                     }
                     
-                    for (id obj in changedCompanyTiles) {
-                        
-                        int company = [obj intValue];
-                        
-                        NSLog(@"Changed company %d", company);
-                        
-                        
-                    }
                     
                     
                     
                     
                     
+                    
+                }
+                else {
+                    [self toggleNextPlayer];
                 }
                
                 
@@ -531,6 +670,8 @@
             
             
             [self updatePlaced];
+            
+            
             
         }
     }
@@ -581,7 +722,7 @@
         _gameGrid = [[Grid alloc] init];
         _gameGrid.size = self.gameView.frame.size;
         _gameGrid.cellAspectRatio = 1;
-        _gameGrid.minimumNumberOfCells = self.game.tileCount;
+        _gameGrid.minimumNumberOfCells = self.game.tileBox.maxPlacementTiles;
         
     }
     
@@ -594,9 +735,10 @@
     
     Grid *grid = self.gameGrid;
     
+    
     for (int row = 0; row < [grid rowCount]; row++) {
         for (int col = 0; col < [grid columnCount]; col++) {
-            if (row*[grid columnCount]+col < self.game.tileCount) {
+            if (row*[grid columnCount]+col < self.game.tileBox.maxPlacementTiles) {
                 CGRect frame = [grid frameOfCellAtRow:0 inColumn:0];
                 frame.size = CGSizeMake(frame.size.width*self.tileScaleFactor, frame.size.height*self.tileScaleFactor);
                 GameBoardTileView *tile = [[GameBoardTileView alloc] initWithFrame:frame];

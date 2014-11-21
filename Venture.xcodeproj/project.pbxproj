@@ -21,6 +21,8 @@
 		FC08D80319F024AD0085D4A9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FC08D80119F024AD0085D4A9 /* InfoPlist.strings */; };
 		FC08D80519F024AD0085D4A9 /* VentureTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FC08D80419F024AD0085D4A9 /* VentureTests.m */; };
 		FC08D80F19F028040085D4A9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC08D80E19F028040085D4A9 /* Images.xcassets */; };
+		FC22179F1A1EC0EA00356A70 /* Market.m in Sources */ = {isa = PBXBuildFile; fileRef = FC22179E1A1EC0EA00356A70 /* Market.m */; };
+		FC2217A21A1ECC9900356A70 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = FC2217A11A1ECC9900356A70 /* Player.m */; };
 		FC2A19A019F99B78009A52C0 /* MainMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = FC2A199F19F99B78009A52C0 /* MainMenuButton.m */; };
 		FC2A19A319F9B42C009A52C0 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC2A19A219F9B42C009A52C0 /* GameViewController.m */; };
 		FC2A19A619F9B8A5009A52C0 /* Grid.m in Sources */ = {isa = PBXBuildFile; fileRef = FC2A19A519F9B8A5009A52C0 /* Grid.m */; };
@@ -63,6 +65,10 @@
 		FC08D80219F024AD0085D4A9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		FC08D80419F024AD0085D4A9 /* VentureTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VentureTests.m; sourceTree = "<group>"; };
 		FC08D80E19F028040085D4A9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		FC22179D1A1EC0EA00356A70 /* Market.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Market.h; sourceTree = "<group>"; };
+		FC22179E1A1EC0EA00356A70 /* Market.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Market.m; sourceTree = "<group>"; };
+		FC2217A01A1ECC9900356A70 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		FC2217A11A1ECC9900356A70 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Player.m; sourceTree = "<group>"; };
 		FC2A199E19F99B78009A52C0 /* MainMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuButton.h; sourceTree = "<group>"; };
 		FC2A199F19F99B78009A52C0 /* MainMenuButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenuButton.m; sourceTree = "<group>"; };
 		FC2A19A119F9B42C009A52C0 /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
@@ -197,6 +203,10 @@
 				FC2C16161A03FCF200618EE7 /* PlacementTileBox.m */,
 				FC2C160E1A02FEC800618EE7 /* Game.h */,
 				FC2C160F1A02FEC800618EE7 /* Game.m */,
+				FC22179D1A1EC0EA00356A70 /* Market.h */,
+				FC22179E1A1EC0EA00356A70 /* Market.m */,
+				FC2217A01A1ECC9900356A70 /* Player.h */,
+				FC2217A11A1ECC9900356A70 /* Player.m */,
 				FC99CBD71A0DACC200F38284 /* GameBoard.h */,
 				FC99CBD81A0DACC200F38284 /* GameBoard.m */,
 				FC99CBD41A0DAA5D00F38284 /* GameBoardTile.h */,
@@ -320,6 +330,7 @@
 				FC99CBDF1A0DB2A500F38284 /* GameBoardTileView.m in Sources */,
 				FC2C16171A03FCF200618EE7 /* PlacementTileBox.m in Sources */,
 				FC2A19A919F9B8D7009A52C0 /* TileView.m in Sources */,
+				FC2217A21A1ECC9900356A70 /* Player.m in Sources */,
 				FC2A19A319F9B42C009A52C0 /* GameViewController.m in Sources */,
 				FC2A19A619F9B8A5009A52C0 /* Grid.m in Sources */,
 				FC99CBD91A0DACC200F38284 /* GameBoard.m in Sources */,
@@ -327,6 +338,7 @@
 				FC08D7E619F024AD0085D4A9 /* main.m in Sources */,
 				FC2A19A019F99B78009A52C0 /* MainMenuButton.m in Sources */,
 				FC08D7F019F024AD0085D4A9 /* VentureMainViewController.m in Sources */,
+				FC22179F1A1EC0EA00356A70 /* Market.m in Sources */,
 				FC99CBD61A0DAA5D00F38284 /* GameBoardTile.m in Sources */,
 				FC08D7EA19F024AD0085D4A9 /* VentureMainAppDelegate.m in Sources */,
 			);
