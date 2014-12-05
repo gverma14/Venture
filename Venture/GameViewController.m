@@ -15,8 +15,7 @@
 #import "GameBoardTile.h"
 #import "Player.h"
 #import "MainMenuButton.h"
-
-
+#import "PortfolioView.h"
 
 
 
@@ -29,7 +28,8 @@
 @property (strong, nonatomic) Grid *gameGrid;
 @property (strong, nonatomic) Player *currentPlayer;
 @property (strong, nonatomic) UILabel *playerLabel;
-
+@property (strong, nonatomic) PortfolioView *portfolio;
+@property (strong, nonatomic) MainMenuButton *marketButton;
 //@property (strong, nonatomic) Grid *grid;
 
 @property (nonatomic) double tileScaleFactor;
@@ -74,6 +74,72 @@ const int playerCount = 4;
     [self layoutTiles];
     [self updatePlayerLabel];
     
+    [self updatePortfolioView];
+    [self setupMarketButton];
+    
+    
+
+    
+}
+
+-(void)setupMarketButton
+{
+    [self.marketButton setTitle:@"Market" forState:UIControlStateNormal];
+    [self.marketButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    
+}
+
+-(MainMenuButton *)marketButton
+{
+    if (!_marketButton) {
+        
+        CGRect frame = self.controlPanelView.bounds;
+        frame.size = CGSizeMake(frame.size.height/1.5, frame.size.height/4);
+        frame.origin.x = self.controlPanelView.frame.size.width - frame.size.width;
+        
+        _marketButton = [[MainMenuButton alloc] initWithFrame:frame];
+        
+        _marketButton.center = CGPointMake(_marketButton.center.x, self.controlPanelView.frame.size.height*3.0/4);
+        [self.controlPanelView addSubview:_marketButton];
+        [_marketButton addTarget:self action:@selector(goToMarketScreen:) forControlEvents:UIControlEventTouchUpInside];
+        
+    }
+    return _marketButton;
+}
+
+-(void)goToMarketScreen:(id)sender
+{
+    NSLog(@"tapped");
+    
+}
+
+-(PortfolioView *)portfolio
+{
+    if (!_portfolio) {
+        CGRect frame = self.controlPanelView.bounds;
+        frame.size.height /=2;
+        frame.origin.y += frame.size.height;
+        
+        _portfolio = [[PortfolioView alloc] initWithFrame:frame];
+        
+        _portfolio.cash = 0;
+        _portfolio.stock = 0;
+        _portfolio.majority = NO;
+        
+        [self.controlPanelView addSubview:_portfolio];
+        
+    }
+    
+    return _portfolio;
+}
+
+
+-(void)updatePortfolioView
+{
+    self.portfolio.cash = self.currentPlayer.cash;
+    
+    
+    
     
 }
 
@@ -101,7 +167,7 @@ const int playerCount = 4;
         
         
         _playerLabel = [[UILabel alloc] initWithFrame:labelFrame];
-        _playerLabel.center = CGPointMake(self.controlPanelView.frame.size.width/2, self.controlPanelView.frame.size.height-labelFrame.size.height);
+        _playerLabel.center = CGPointMake(self.controlPanelView.frame.size.width/2, 3.0/4*self.controlPanelView.frame.size.height);
         
         //_playerLabel.backgroundColor = [UIColor orangeColor];
         if (self.currentPlayer) {
@@ -124,6 +190,7 @@ const int playerCount = 4;
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    
     [self updateMarks];
     
     [self updatePlaced];
@@ -498,7 +565,7 @@ const int playerCount = 4;
     
     [UIView animateWithDuration:.25 delay:.75 options:UIViewAnimationOptionLayoutSubviews animations:^{
         button.alpha = 1.0;
-        button.center = CGPointMake(controlFrame.size.width/2, buttonFrame.size.height/2);
+        button.center = CGPointMake(controlFrame.size.width/2, controlFrame.size.height/4);
         
     }completion:nil];
     NSLog(@"activating button");
@@ -739,6 +806,8 @@ const int playerCount = 4;
     for (int row = 0; row < [grid rowCount]; row++) {
         for (int col = 0; col < [grid columnCount]; col++) {
             if (row*[grid columnCount]+col < self.game.tileBox.maxPlacementTiles) {
+                NSLog(@"%d tile no", row*[grid columnCount]+col);
+                
                 CGRect frame = [grid frameOfCellAtRow:0 inColumn:0];
                 frame.size = CGSizeMake(frame.size.width*self.tileScaleFactor, frame.size.height*self.tileScaleFactor);
                 GameBoardTileView *tile = [[GameBoardTileView alloc] initWithFrame:frame];
@@ -754,6 +823,8 @@ const int playerCount = 4;
             }
         }
     }
+    
+    NSLog(@"finished");
     
     
 }

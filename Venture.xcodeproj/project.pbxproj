@@ -23,6 +23,7 @@
 		FC08D80F19F028040085D4A9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC08D80E19F028040085D4A9 /* Images.xcassets */; };
 		FC22179F1A1EC0EA00356A70 /* Market.m in Sources */ = {isa = PBXBuildFile; fileRef = FC22179E1A1EC0EA00356A70 /* Market.m */; };
 		FC2217A21A1ECC9900356A70 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = FC2217A11A1ECC9900356A70 /* Player.m */; };
+		FC2217A51A2102F900356A70 /* PortfolioView.m in Sources */ = {isa = PBXBuildFile; fileRef = FC2217A41A2102F900356A70 /* PortfolioView.m */; };
 		FC2A19A019F99B78009A52C0 /* MainMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = FC2A199F19F99B78009A52C0 /* MainMenuButton.m */; };
 		FC2A19A319F9B42C009A52C0 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC2A19A219F9B42C009A52C0 /* GameViewController.m */; };
 		FC2A19A619F9B8A5009A52C0 /* Grid.m in Sources */ = {isa = PBXBuildFile; fileRef = FC2A19A519F9B8A5009A52C0 /* Grid.m */; };
@@ -69,6 +70,8 @@
 		FC22179E1A1EC0EA00356A70 /* Market.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Market.m; sourceTree = "<group>"; };
 		FC2217A01A1ECC9900356A70 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		FC2217A11A1ECC9900356A70 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Player.m; sourceTree = "<group>"; };
+		FC2217A31A2102F900356A70 /* PortfolioView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PortfolioView.h; sourceTree = "<group>"; };
+		FC2217A41A2102F900356A70 /* PortfolioView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PortfolioView.m; sourceTree = "<group>"; };
 		FC2A199E19F99B78009A52C0 /* MainMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuButton.h; sourceTree = "<group>"; };
 		FC2A199F19F99B78009A52C0 /* MainMenuButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenuButton.m; sourceTree = "<group>"; };
 		FC2A19A119F9B42C009A52C0 /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
@@ -151,6 +154,8 @@
 				FC08D7EB19F024AD0085D4A9 /* Main.storyboard */,
 				FC2A19A119F9B42C009A52C0 /* GameViewController.h */,
 				FC2A19A219F9B42C009A52C0 /* GameViewController.m */,
+				FC2217A31A2102F900356A70 /* PortfolioView.h */,
+				FC2217A41A2102F900356A70 /* PortfolioView.m */,
 				FC99CBDD1A0DB2A500F38284 /* GameBoardTileView.h */,
 				FC99CBDE1A0DB2A500F38284 /* GameBoardTileView.m */,
 				FC2A19A719F9B8D7009A52C0 /* TileView.h */,
@@ -329,6 +334,7 @@
 				FC2C16101A02FEC800618EE7 /* Game.m in Sources */,
 				FC99CBDF1A0DB2A500F38284 /* GameBoardTileView.m in Sources */,
 				FC2C16171A03FCF200618EE7 /* PlacementTileBox.m in Sources */,
+				FC2217A51A2102F900356A70 /* PortfolioView.m in Sources */,
 				FC2A19A919F9B8D7009A52C0 /* TileView.m in Sources */,
 				FC2217A21A1ECC9900356A70 /* Player.m in Sources */,
 				FC2A19A319F9B42C009A52C0 /* GameViewController.m in Sources */,
