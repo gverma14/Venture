@@ -39,17 +39,55 @@
                     </view>
                     <navigationItem key="navigationItem" id="RPL-R7-Yfp"/>
                     <connections>
-                        <segue destination="qv2-v8-AqL" kind="modal" identifier="playSegue" modalTransitionStyle="flipHorizontal" id="d77-aT-YLY"/>
+                        <segue destination="hVp-Kb-0Kq" kind="modal" identifier="playSegue" modalTransitionStyle="flipHorizontal" id="d77-aT-YLY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="866" y="-2"/>
         </scene>
+        <!--Test View Controller-->
+        <scene sceneID="tWb-gJ-ixv">
+            <objects>
+                <viewController extendedLayoutIncludesOpaqueBars="YES" id="E3C-Kr-rOQ" customClass="TestViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="B2D-D3-STe"/>
+                        <viewControllerLayoutGuide type="bottom" id="e1t-Qk-hua"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="jK2-id-wSY">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2jr-vf-4UH">
+                                <rect key="frame" x="139" y="273" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.64705882349999999" green="0.0" blue="0.12941176469999999" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                    <toolbarItems>
+                        <barButtonItem id="3n7-Qn-0kF"/>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" id="F7i-s6-3fE">
+                        <barButtonItem key="rightBarButtonItem" title="Done" id="ylz-qu-C9E">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="doneButtonPressed:" destination="E3C-Kr-rOQ" id="CZI-Wo-MSu"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vR3-f4-AYh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2851" y="-2"/>
+        </scene>
         <!--Game View Controller-->
         <scene sceneID="e1i-PM-D7t">
             <objects>
-                <viewController id="qv2-v8-AqL" customClass="GameViewController" sceneMemberID="viewController">
+                <viewController extendedLayoutIncludesOpaqueBars="YES" id="qv2-v8-AqL" customClass="GameViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Vpl-nt-d9s"/>
                         <viewControllerLayoutGuide type="bottom" id="QKf-2o-6Bh"/>
@@ -59,18 +97,24 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hKo-8c-dxn">
-                                <rect key="frame" x="20" y="58" width="280" height="375"/>
+                                <rect key="frame" x="20" y="75" width="280" height="375"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zvx-Qh-TFB">
-                                <rect key="frame" x="20" y="428" width="280" height="120"/>
+                                <rect key="frame" x="20" y="423" width="280" height="125"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.64705882349999999" green="0.0" blue="0.12941176469999999" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
-                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <navigationItem key="navigationItem" id="cr9-mr-mYF"/>
+                    <navigationItem key="navigationItem" id="cr9-mr-mYF">
+                        <barButtonItem key="rightBarButtonItem" title="Market" id="c7Q-FY-oLL">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <segue destination="Vdt-Bf-cie" kind="modal" id="dww-2e-qzv"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="controlPanelView" destination="zvx-Qh-TFB" id="ovN-qy-pPq"/>
                         <outlet property="gameView" destination="hKo-8c-dxn" id="cxC-gd-B5r"/>
@@ -78,7 +122,52 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bWO-Io-h6W" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="1838" y="-2"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="3dk-L3-x2h">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="hVp-Kb-0Kq" sceneMemberID="viewController">
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="p1g-qC-MuF">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="JfT-Di-ZME">
+                        <rect key="frame" x="0.0" y="524" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
+                    <connections>
+                        <segue destination="qv2-v8-AqL" kind="relationship" relationship="rootViewController" id="n8s-Pw-Lf5"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ufK-tN-eub" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
             <point key="canvasLocation" x="1312" y="-2"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="4gL-Rv-TRy">
+            <objects>
+                <navigationController extendedLayoutIncludesOpaqueBars="YES" automaticallyAdjustsScrollViewInsets="NO" id="Vdt-Bf-cie" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="5sf-O7-rKq">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="X57-Ur-dhf">
+                        <rect key="frame" x="0.0" y="524" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
+                    <connections>
+                        <segue destination="E3C-Kr-rOQ" kind="relationship" relationship="rootViewController" id="wsP-Gl-jkX"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zEC-Xm-gVV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2325" y="-2"/>
         </scene>
     </scenes>
     <resources>

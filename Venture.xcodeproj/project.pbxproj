@@ -34,6 +34,7 @@
 		FC99CBD61A0DAA5D00F38284 /* GameBoardTile.m in Sources */ = {isa = PBXBuildFile; fileRef = FC99CBD51A0DAA5D00F38284 /* GameBoardTile.m */; };
 		FC99CBD91A0DACC200F38284 /* GameBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = FC99CBD81A0DACC200F38284 /* GameBoard.m */; };
 		FC99CBDF1A0DB2A500F38284 /* GameBoardTileView.m in Sources */ = {isa = PBXBuildFile; fileRef = FC99CBDE1A0DB2A500F38284 /* GameBoardTileView.m */; };
+		FCAE89021A328B510094A93F /* TestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCAE89011A328B510094A93F /* TestViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,6 +93,8 @@
 		FC99CBD81A0DACC200F38284 /* GameBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBoard.m; sourceTree = "<group>"; };
 		FC99CBDD1A0DB2A500F38284 /* GameBoardTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameBoardTileView.h; path = ../GameBoardTileView.h; sourceTree = "<group>"; };
 		FC99CBDE1A0DB2A500F38284 /* GameBoardTileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GameBoardTileView.m; path = ../GameBoardTileView.m; sourceTree = "<group>"; };
+		FCAE89001A328B510094A93F /* TestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestViewController.h; sourceTree = "<group>"; };
+		FCAE89011A328B510094A93F /* TestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,6 +155,8 @@
 			isa = PBXGroup;
 			children = (
 				FC08D7EB19F024AD0085D4A9 /* Main.storyboard */,
+				FCAE89001A328B510094A93F /* TestViewController.h */,
+				FCAE89011A328B510094A93F /* TestViewController.m */,
 				FC2A19A119F9B42C009A52C0 /* GameViewController.h */,
 				FC2A19A219F9B42C009A52C0 /* GameViewController.m */,
 				FC2217A31A2102F900356A70 /* PortfolioView.h */,
@@ -343,6 +348,7 @@
 				FC2C16141A02FFC700618EE7 /* PlacementTile.m in Sources */,
 				FC08D7E619F024AD0085D4A9 /* main.m in Sources */,
 				FC2A19A019F99B78009A52C0 /* MainMenuButton.m in Sources */,
+				FCAE89021A328B510094A93F /* TestViewController.m in Sources */,
 				FC08D7F019F024AD0085D4A9 /* VentureMainViewController.m in Sources */,
 				FC22179F1A1EC0EA00356A70 /* Market.m in Sources */,
 				FC99CBD61A0DAA5D00F38284 /* GameBoardTile.m in Sources */,

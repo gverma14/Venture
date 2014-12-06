@@ -68,9 +68,18 @@ const int playerCount = 4;
     return _game;
 }
 
+-(void) viewWillAppear:(BOOL)animated
+{
+    
+    self.navigationController.navigationBar.translucent = NO;
+    UIColor *color = self.view.backgroundColor;
+    
+    self.navigationController.navigationBar.barTintColor = color;
+}
+
 -(void)viewDidLoad
 {
-
+    
     [self layoutTiles];
     [self updatePlayerLabel];
     
