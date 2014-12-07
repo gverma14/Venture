@@ -16,6 +16,7 @@
 #import "Player.h"
 #import "MainMenuButton.h"
 #import "PortfolioView.h"
+#import "MarketTableViewController.h"
 
 
 
@@ -30,6 +31,8 @@
 @property (strong, nonatomic) UILabel *playerLabel;
 @property (strong, nonatomic) PortfolioView *portfolio;
 @property (strong, nonatomic) MainMenuButton *marketButton;
+@property (nonatomic) BOOL marketIsOpen;
+
 //@property (strong, nonatomic) Grid *grid;
 
 @property (nonatomic) double tileScaleFactor;
@@ -79,12 +82,32 @@ const int playerCount = 4;
 
 -(void)viewDidLoad
 {
+    UINavigationItem *navigation = self.navigationItem;
+    
+    CGRect frame = CGRectMake(0, 0, 100, 50);
+    UILabel *ventureLabel = [[UILabel alloc] initWithFrame:frame];
+    //ventureLabel.backgroundColor = [UIColor greenColor];
+    
+    UIFont *font = [UIFont fontWithName:@"optima-bold" size:25];
+    NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
+    
+    paragraph.alignment = NSTextAlignmentCenter;
+    
+    NSDictionary *attributes = @{NSFontAttributeName: font, NSForegroundColorAttributeName : [UIColor whiteColor], NSParagraphStyleAttributeName : paragraph};
+    
+    NSAttributedString *ventureText = [[NSAttributedString alloc] initWithString:@"VENTURE" attributes:attributes];
+    
+    ventureLabel.attributedText = ventureText;
+    
+    navigation.titleView = ventureLabel;
+    
+    
     
     [self layoutTiles];
     [self updatePlayerLabel];
     
     [self updatePortfolioView];
-    [self setupMarketButton];
+    //[self setupMarketButton];
     
     
 
@@ -118,7 +141,7 @@ const int playerCount = 4;
 
 -(void)goToMarketScreen:(id)sender
 {
-    NSLog(@"tapped");
+    //NSLog(@"tapped");
     
 }
 
@@ -390,7 +413,7 @@ const int playerCount = 4;
                 
                 
                 
-                [self.game startCompanyAtTile:self.currentTileToBeChanged withCompanyType:[NSNumber numberWithInt:companyType]];
+                [self.game startCompanyAtTile:self.currentTileToBeChanged withCompanyType:[NSNumber numberWithInt:companyType] forPlayer:self.currentPlayer];
                 [self updatePlaced];
                 self.currentTileToBeChanged = nil;
                 
@@ -422,6 +445,8 @@ const int playerCount = 4;
         
         
     }
+    
+    self.marketIsOpen = YES;
 }
 
 
@@ -459,7 +484,7 @@ const int playerCount = 4;
             }completion:^(BOOL finished) {
                 
                 if (finished) {
-                    NSLog(@"finished");
+                    //NSLog(@"finished");
                 }
                 
                 
@@ -530,7 +555,7 @@ const int playerCount = 4;
 
 -(void)completeMergerAction:(UITapGestureRecognizer *)gesture
 {
-    NSLog(@"tapped");
+    //NSLog(@"tapped");
     
     [self stopAllAnimation];
     GameBoardTileView *view = (GameBoardTileView *) gesture.view;
@@ -545,7 +570,7 @@ const int playerCount = 4;
     
     
     [self toggleNextPlayer];
-    
+    self.marketIsOpen = YES;
     
 }
 
@@ -562,7 +587,7 @@ const int playerCount = 4;
     MainMenuButton *button = [[MainMenuButton alloc] initWithFrame:buttonFrame];
     
     
-    [button setTitle:@"Next Player" forState:UIControlStateNormal];
+    [button setTitle:@"End Turn" forState:UIControlStateNormal];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
     [button addTarget:self action:@selector(nextPlayerButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -577,14 +602,61 @@ const int playerCount = 4;
         button.center = CGPointMake(controlFrame.size.width/2, controlFrame.size.height/4);
         
     }completion:nil];
-    NSLog(@"activating button");
+    //NSLog(@"activating button");
     
     [self toggleTaps:NO];
     
+    //[self performSelector:@selector(performMarketSegue) withObject:self afterDelay:1.5];
+    
+    
+    
+    
+    
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"marketSegue"]) {
+        
+        UINavigationController *navigation = (UINavigationController *)segue.destinationViewController;
+        
+        if ([navigation.topViewController isKindOfClass:[MarketTableViewController class]]) {
+            NSLog(@"%@", navigation.topViewController);
+            MarketTableViewController *marketViewController = (MarketTableViewController *) navigation.topViewController;
+            
+            marketViewController.marketIsOpen = self.marketIsOpen;
+            if (!marketViewController.market) {
+                marketViewController.market = self.game.market;
+            }
+            
+            if (!marketViewController.players) {
+                marketViewController.players = self.game.players;
+            }
+            if (!marketViewController.currentPlayer) {
+                marketViewController.currentPlayer = self.currentPlayer;
+                
+            }
+            if (!marketViewController.chainsInPlay) {
+                marketViewController.chainsInPlay = self.game.chainsInPlay;
+            }
+            
+            marketViewController.marketIsOpen = self.marketIsOpen;
+            
+        }
+    }
+    
+}
+
+
+-(void)performMarketSegue
+{
+    [self performSegueWithIdentifier:@"marketSegue" sender:self.navigationItem.rightBarButtonItem];
+
 }
 
 -(void)nextPlayerButtonPressed:(id)sender
 {
+    self.marketIsOpen = NO;
     
     UIButton *button = (UIButton *)sender;
     
@@ -622,6 +694,7 @@ const int playerCount = 4;
     
     [self toggleTaps:YES];
     
+    self.game.market.purchaseCount = 0;
     
     
     
@@ -732,6 +805,7 @@ const int playerCount = 4;
                     
                 }
                 else {
+                    
                     [self toggleNextPlayer];
                 }
                
@@ -741,6 +815,9 @@ const int playerCount = 4;
                 [self updateMarks];
                 
                 [gameTileView removeGestureRecognizer:[gameTileView.gestureRecognizers objectAtIndex:0]];
+                
+                self.marketIsOpen = abs([self.game.chainsInPlay count] - 8);
+                
                 
             }
             
@@ -815,7 +892,7 @@ const int playerCount = 4;
     for (int row = 0; row < [grid rowCount]; row++) {
         for (int col = 0; col < [grid columnCount]; col++) {
             if (row*[grid columnCount]+col < self.game.tileBox.maxPlacementTiles) {
-                NSLog(@"%d tile no", row*[grid columnCount]+col);
+                //NSLog(@"%d tile no", row*[grid columnCount]+col);
                 
                 CGRect frame = [grid frameOfCellAtRow:0 inColumn:0];
                 frame.size = CGSizeMake(frame.size.width*self.tileScaleFactor, frame.size.height*self.tileScaleFactor);
@@ -833,7 +910,7 @@ const int playerCount = 4;
         }
     }
     
-    NSLog(@"finished");
+    //NSLog(@"finished");
     
     
 }

@@ -24,7 +24,7 @@
 
 /// Game board actions
 -(void)completeMergerWithTile:(GameBoardTile *)mergerTile;
--(void)startCompanyAtTile:(GameBoardTile *)tile withCompanyType:(NSNumber *)companyType;
+-(void)startCompanyAtTile:(GameBoardTile *)tile withCompanyType:(NSNumber *)companyType forPlayer:(Player *)player;
 -(NSArray *) chooseTileAtRow:(int)row column:(int)col forPlayer:(Player *)player; ///Returns an array of the highest chain length neighboring tiles
 
 

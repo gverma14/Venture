@@ -13,6 +13,7 @@
 @property (nonatomic, strong) NSMutableArray *sharePrices;
 @property (nonatomic, strong) NSMutableArray *sharesLeft;
 @property (nonatomic) int numberOfCompanies;
+@property (nonatomic) int purchaseCount;
 
 
 -(instancetype)initWithNumberCompanies:(int)number;

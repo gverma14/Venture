@@ -35,7 +35,7 @@
             
             
         }
-        NSLog(@"share price count %d", [_sharePrices count]);
+        //NSLog(@"share price count %d", [_sharePrices count]);
         
         
     }

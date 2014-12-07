@@ -31,6 +31,11 @@
         _cashLabel = [[UILabel alloc] initWithFrame:frame];
         _cashLabel.text = [NSString stringWithFormat:@"Cash: %d", self.cash];
         _cashLabel.textColor = [UIColor whiteColor];
+//        _cashLabel.adjustsFontSizeToFitWidth = YES;
+//        _cashLabel.minimumScaleFactor = .001;
+        UIFont *font = _cashLabel.font;
+        font = [font fontWithSize:font.pointSize*.75];
+        _cashLabel.font = font;
         [self addSubview:_cashLabel];
         
     }
@@ -47,6 +52,11 @@
         _stockLabel = [[UILabel alloc] initWithFrame:frame];
         _stockLabel.text = [NSString stringWithFormat:@"Stock: %d", self.stock];
         _stockLabel.textColor = [UIColor whiteColor];
+        UIFont *font = _stockLabel.font;
+        font = [font fontWithSize:font.pointSize*.75];
+        _stockLabel.font = font;
+//        _stockLabel.adjustsFontSizeToFitWidth = YES;
+//        _stockLabel.minimumScaleFactor = .001;
         [self addSubview:_stockLabel];
     }
     return _stockLabel;
@@ -62,6 +72,11 @@
         _totalLabel = [[UILabel alloc] initWithFrame:frame];
         _totalLabel.text = [NSString stringWithFormat:@"Total: %d", self.stock+self.cash];
         _totalLabel.textColor = [UIColor whiteColor];
+//        _totalLabel.adjustsFontSizeToFitWidth = YES;
+//        _totalLabel.minimumScaleFactor = .001;
+        UIFont *font = _totalLabel.font;
+        font = [font fontWithSize:font.pointSize*.75];
+        _totalLabel.font = font;
         [self addSubview:_totalLabel];
         
     }
@@ -81,6 +96,12 @@
         
         _majorityLabel.text = [NSString stringWithFormat:@"Majority %@", majority];
         _majorityLabel.textColor = [UIColor whiteColor];
+//        _majorityLabel.adjustsFontSizeToFitWidth = YES;
+//        _majorityLabel.minimumScaleFactor = .001;
+        
+        UIFont *font = _majorityLabel.font;
+        font = [font fontWithSize:font.pointSize*.75];
+        _majorityLabel.font = font;
         [self addSubview:_majorityLabel];
     }
     

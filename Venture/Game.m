@@ -47,6 +47,13 @@ static const int chainsPossible = 7;
     
 }
 
+-(Market *)market
+{
+    if (!_market) {
+        _market = [[Market alloc] initWithNumberCompanies:chainsPossible];
+    }
+    return _market;
+}
 
 -(NSMutableArray *)chainsInPlay
 {
@@ -183,7 +190,7 @@ static const int chainsPossible = 7;
                 
                 [self.chainsInPlay addObjectsFromArray:changedCompanyTiles];
                 
-                NSLog(@"%d changed companies", [changedCompanyTiles count]);
+                //NSLog(@"%d changed companies", [changedCompanyTiles count]);
             }
             else if ( [highestNeighboringTiles count] > 1) {
                 return highestNeighboringTiles;
@@ -233,12 +240,12 @@ static const int chainsPossible = 7;
     
     
     [self.chainsInPlay addObjectsFromArray:changedCompanies];
-    NSLog(@"%d chains in play", [self.chainsInPlay count]);
+    //NSLog(@"%d chains in play", [self.chainsInPlay count]);
     
 }
 
 
--(void)startCompanyAtTile:(GameBoardTile *)tile withCompanyType:(NSNumber *)companyType
+-(void)startCompanyAtTile:(GameBoardTile *)tile withCompanyType:(NSNumber *)companyType forPlayer:(Player *)player
 {
     NSMutableArray *previous = [[NSMutableArray alloc] initWithObjects:tile, nil];
     NSMutableArray *changedCompanies = [[NSMutableArray alloc] init];
@@ -248,6 +255,25 @@ static const int chainsPossible = 7;
     [self.board changeNeighborsOfTile:tile toCompanyType:[companyType intValue] withPreviousTiles:previous withChangedCompanyTiles:changedCompanies];
     
     [self.chainsInPlay removeObjectIdenticalTo:companyType];
+    
+    NSMutableArray *sharesOwned = player.sharesOwned;
+    NSMutableArray *sharesLeft = self.market.sharesLeft;
+    
+
+    int playerShareNumber = [[sharesOwned objectAtIndex:[companyType intValue]] intValue];
+    int bankShareNumber = [[sharesLeft objectAtIndex:[companyType intValue]] intValue];
+    
+    playerShareNumber++;
+    bankShareNumber--;
+    
+    
+    [sharesOwned setObject:[NSNumber numberWithInt:playerShareNumber] atIndexedSubscript:[companyType intValue]];
+    [sharesLeft setObject:[NSNumber numberWithInt:bankShareNumber] atIndexedSubscript:[companyType intValue]];
+    
+    
+
+    
+    
     
     
     
