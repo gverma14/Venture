@@ -9,16 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "Market.h"
 #import "Player.h"
+#import "Game.h"
+
 
 @interface MarketTableViewController : UITableViewController
 
+@property (nonatomic, strong) Game *game;
 
-@property (nonatomic, strong) Market *market;
-@property (nonatomic, strong) NSArray *players;
 @property (nonatomic, strong) Player *currentPlayer;
 @property (nonatomic) BOOL marketIsOpen;
 
-@property (nonatomic, strong) NSArray *chainsInPlay;
 
 
 @end

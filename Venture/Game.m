@@ -17,7 +17,6 @@
 @end
 
 
-static const int chainsPossible = 7;
 
 
 

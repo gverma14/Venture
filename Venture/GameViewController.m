@@ -625,22 +625,11 @@ const int playerCount = 4;
             MarketTableViewController *marketViewController = (MarketTableViewController *) navigation.topViewController;
             
             marketViewController.marketIsOpen = self.marketIsOpen;
-            if (!marketViewController.market) {
-                marketViewController.market = self.game.market;
+            
+            if (!marketViewController.game) {
+                marketViewController.game = self.game;
             }
             
-            if (!marketViewController.players) {
-                marketViewController.players = self.game.players;
-            }
-            if (!marketViewController.currentPlayer) {
-                marketViewController.currentPlayer = self.currentPlayer;
-                
-            }
-            if (!marketViewController.chainsInPlay) {
-                marketViewController.chainsInPlay = self.game.chainsInPlay;
-            }
-            
-            marketViewController.marketIsOpen = self.marketIsOpen;
             
         }
     }
