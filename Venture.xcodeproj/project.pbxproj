@@ -25,6 +25,7 @@
 		FC2217A21A1ECC9900356A70 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = FC2217A11A1ECC9900356A70 /* Player.m */; };
 		FC2217A51A2102F900356A70 /* PortfolioView.m in Sources */ = {isa = PBXBuildFile; fileRef = FC2217A41A2102F900356A70 /* PortfolioView.m */; };
 		FC2713B81A33D6260024CEC7 /* MarketTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC2713B71A33D6260024CEC7 /* MarketTableViewController.m */; };
+		FC2713BB1A36822E0024CEC7 /* TilePaletteView.m in Sources */ = {isa = PBXBuildFile; fileRef = FC2713BA1A36822E0024CEC7 /* TilePaletteView.m */; };
 		FC2A19A019F99B78009A52C0 /* MainMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = FC2A199F19F99B78009A52C0 /* MainMenuButton.m */; };
 		FC2A19A319F9B42C009A52C0 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC2A19A219F9B42C009A52C0 /* GameViewController.m */; };
 		FC2A19A619F9B8A5009A52C0 /* Grid.m in Sources */ = {isa = PBXBuildFile; fileRef = FC2A19A519F9B8A5009A52C0 /* Grid.m */; };
@@ -75,6 +76,8 @@
 		FC2217A41A2102F900356A70 /* PortfolioView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PortfolioView.m; sourceTree = "<group>"; };
 		FC2713B61A33D6260024CEC7 /* MarketTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarketTableViewController.h; sourceTree = "<group>"; };
 		FC2713B71A33D6260024CEC7 /* MarketTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarketTableViewController.m; sourceTree = "<group>"; };
+		FC2713B91A36822D0024CEC7 /* TilePaletteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TilePaletteView.h; sourceTree = "<group>"; };
+		FC2713BA1A36822E0024CEC7 /* TilePaletteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TilePaletteView.m; sourceTree = "<group>"; };
 		FC2A199E19F99B78009A52C0 /* MainMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuButton.h; sourceTree = "<group>"; };
 		FC2A199F19F99B78009A52C0 /* MainMenuButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenuButton.m; sourceTree = "<group>"; };
 		FC2A19A119F9B42C009A52C0 /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
@@ -157,6 +160,8 @@
 				FC08D7EB19F024AD0085D4A9 /* Main.storyboard */,
 				FC2713B61A33D6260024CEC7 /* MarketTableViewController.h */,
 				FC2713B71A33D6260024CEC7 /* MarketTableViewController.m */,
+				FC2713BA1A36822E0024CEC7 /* TilePaletteView.m */,
+				FC2713B91A36822D0024CEC7 /* TilePaletteView.h */,
 				FC2A19A119F9B42C009A52C0 /* GameViewController.h */,
 				FC2A19A219F9B42C009A52C0 /* GameViewController.m */,
 				FC2217A31A2102F900356A70 /* PortfolioView.h */,
@@ -348,6 +353,7 @@
 				FC2C16141A02FFC700618EE7 /* PlacementTile.m in Sources */,
 				FC08D7E619F024AD0085D4A9 /* main.m in Sources */,
 				FC2A19A019F99B78009A52C0 /* MainMenuButton.m in Sources */,
+				FC2713BB1A36822E0024CEC7 /* TilePaletteView.m in Sources */,
 				FC08D7F019F024AD0085D4A9 /* VentureMainViewController.m in Sources */,
 				FC22179F1A1EC0EA00356A70 /* Market.m in Sources */,
 				FC99CBD61A0DAA5D00F38284 /* GameBoardTile.m in Sources */,

@@ -25,6 +25,8 @@ static const int placementTileCount = 6;
         
     }
     
+    self.cash = 60;
+    
     return self;
     
 }

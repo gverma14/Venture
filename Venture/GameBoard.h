@@ -17,6 +17,7 @@
 @property (nonatomic) int colCount;
 
 
+- (NSArray *)chainNumbersOnBoard:(int)totalCompanies;
 
 -(GameBoardTile *)retrieveTileAtRow:(int)row column:(int)col;
 

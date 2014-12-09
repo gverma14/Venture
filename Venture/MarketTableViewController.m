@@ -7,6 +7,9 @@
 //
 
 #import "MarketTableViewController.h"
+#import "GameBoard.h"
+#import "GameBoardTileView.h"
+#import "TilePaletteView.h"
 
 @interface MarketTableViewController ()
 
@@ -34,6 +37,9 @@
     self.tableView.scrollEnabled = NO;
 
     [self setupNavBar];
+    
+    
+    
     
 }
 
@@ -72,7 +78,7 @@
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -116,37 +122,62 @@
     //NSLog(@"new table");
 
 
-    NSLog(@"labelview count %d", [labelView.subviews count]);
+    //NSLog(@"labelview count %d", [labelView.subviews count]);
     
     
 
-    if (indexPath.section >= 0) {
+    if (indexPath.section == 0) {
         if (indexPath.row > 0) {
             
+            
+            
+            
+            // Set up name label and price label
             if (![labelView.subviews count]) {
-                
-                CGRect frame = labelView.bounds;
-                frame.size.width /= 2;
-                
-                UILabel *nameLabel = [[UILabel alloc] initWithFrame:frame];
-                
-                frame.origin.x += frame.size.width;
-                UILabel *priceLabel = [[UILabel alloc] initWithFrame:frame];
-                
-                nameLabel.backgroundColor = [UIColor greenColor];
-                priceLabel.backgroundColor = [UIColor redColor];
-                
-                nameLabel.backgroundColor = [nameLabel.backgroundColor colorWithAlphaComponent:.5];
-                priceLabel.backgroundColor = [priceLabel.backgroundColor colorWithAlphaComponent:.5];
-                
-                
-                [labelView addSubview:nameLabel];
-                [labelView addSubview:priceLabel];
+                if (indexPath.row > [self.game.players count]) {
+                    UILabel *label = [[UILabel alloc] initWithFrame:labelView.bounds];
+                    label.text = @"X";
+                    label.textAlignment = NSTextAlignmentCenter;
+                    label.textColor = [UIColor whiteColor];
+                    [labelView addSubview:label];
+                    
+                }
+                else {
+                    CGRect frame = labelView.bounds;
+                    frame.size.width /= 2;
+                    
+                    UILabel *nameLabel = [[UILabel alloc] initWithFrame:frame];
+                    
+                    frame.origin.x += frame.size.width;
+                    UILabel *priceLabel = [[UILabel alloc] initWithFrame:frame];
+                    
+                    //nameLabel.backgroundColor = [UIColor greenColor];
+                    //priceLabel.backgroundColor = [UIColor redColor];
+                    
+                    //nameLabel.backgroundColor = [nameLabel.backgroundColor colorWithAlphaComponent:.5];
+                    //priceLabel.backgroundColor = [priceLabel.backgroundColor colorWithAlphaComponent:.5];
+                    
+                    nameLabel.textAlignment = NSTextAlignmentCenter;
+                    priceLabel.textAlignment = NSTextAlignmentCenter;
+                    
+                    nameLabel.textColor = [UIColor whiteColor];
+                    priceLabel.textColor = [UIColor whiteColor];
+                    
+                    nameLabel.text = @"X";
+                    priceLabel.text = @"X";
+                    
+                    
+                    [labelView addSubview:nameLabel];
+                    [labelView addSubview:priceLabel];
+
+                }
                 
                 
                 
             }
             
+            
+            // Set up company share number labels
             if (![infoView.subviews count]) {
                 CGRect frame = infoView.bounds;
                 frame.size.width /= chainsPossible;
@@ -156,11 +187,11 @@
                     
                     UILabel *shareLabel = [[UILabel alloc] initWithFrame:frame];
                     
-                    shareLabel.backgroundColor = [UIColor yellowColor];
-                    shareLabel.backgroundColor = [shareLabel.backgroundColor colorWithAlphaComponent:.5];
-                    shareLabel.text = @"A";
+                    //shareLabel.backgroundColor = [UIColor yellowColor];
+                    //shareLabel.backgroundColor = [shareLabel.backgroundColor colorWithAlphaComponent:.5];
+                    shareLabel.text = @"X";
                     shareLabel.textAlignment = NSTextAlignmentCenter;
-                    
+                    shareLabel.textColor = [UIColor whiteColor];
                     [infoView addSubview:shareLabel];
                     
                     frame.origin.x += frame.size.width;
@@ -169,54 +200,75 @@
                 }
             }
             
-            //CGRect cellFrame = cell.bounds;
+            
+            NSArray *sharesOwned;
+
+            
+            if ([labelView.subviews count] == 1) {
+                UILabel *label = labelView.subviews[0];
+                label.text = @"Bank";
+                label.textAlignment = NSTextAlignmentCenter;
+                label.textColor = [UIColor whiteColor];
+                sharesOwned = self.game.market.sharesLeft;
+            }
+            else if ([labelView.subviews count] == 2) {
+                UILabel *nameLabel = labelView.subviews[0];
+                UILabel *priceLabel = labelView.subviews[1];
+                
+                NSString *nameString = [NSString stringWithFormat:@"%d", indexPath.row];;
+                
+                Player *thisPlayer = self.game.players[indexPath.row-1];
+                NSString *priceString = [NSString stringWithFormat:@"$%d", thisPlayer.cash];
+                
+                sharesOwned = thisPlayer.sharesOwned;
+                
+                nameLabel.text = nameString;
+                priceLabel.text = priceString;
+                
+                
+                
+            }
+            
+            
+            /// Fill name and price label
             
             
             
             
             
-//            
-//            UILabel *nameLabel = [[UILabel alloc] initWithFrame:]
-//            
-//            if (indexPath.row > [self.game.players count]) {
-//                nameString = @"Bank";
-//            }
-//            else {
-//                nameString = [NSString stringWithFormat:@"%d", indexPath.row];
-//            }
-//            
-//            NSDictionary *attributes = [nameLabel.attributedText attributesAtIndex:0 effectiveRange:nil];
-//            
-//            
-//            nameLabel.attributedText = [[NSAttributedString alloc] initWithString:nameString attributes:attributes];
-//            NSArray *sharesOwned;
-//            if (indexPath.row <= [self.game.players count]) {
-//                Player *player = self.game.players[indexPath.row -1];
-//                sharesOwned = player.sharesOwned;
-//            }
-//            else {
-//                sharesOwned = self.game.market.sharesLeft;
-//            }
-//            
-//            
-//            for (int i = 1; i <= 7; i++) {
-//                
-//                UILabel *shareLabel = (UILabel *)[cell viewWithTag:i];
-//                
-//                NSNumber *shares = (NSNumber *) sharesOwned[i];
-//                
-//                NSString *shareString = [NSString stringWithFormat:@"%d", shares.intValue];
-//                
-//                
-//                shareLabel.attributedText = [[NSAttributedString alloc] initWithString:shareString attributes:attributes];
-//                
-//            }
+
+            
+            
+            
+            
+            for (int i = 1; i <= chainsPossible; i++) {
+                UILabel *label = (UILabel *) infoView.subviews[i-1];
+                NSNumber *shares =  sharesOwned[i];
+                
+                NSString *shareString = [NSString stringWithFormat:@"%d", [shares intValue]];
+                
+                label.text = shareString;
+                
+            }
             
             
             
             
             
             
+            
+            
+            
+            
+            
+        }
+        else {
+            //infoView.backgroundColor = [UIColor whiteColor] ;
+            CGRect frame = infoView.bounds;
+            
+            TilePaletteView *paletteView = [[TilePaletteView alloc] initWithFrame:frame chains:chainsPossible];
+            
+            [infoView addSubview:paletteView];
             
             
             
@@ -226,57 +278,114 @@
     
     
     
-    else {
-        UILabel *nameLabel = (UILabel *)[cell viewWithTag:100];
-        NSDictionary *attributes = [nameLabel.attributedText attributesAtIndex:0 effectiveRange:nil];
-        nameLabel.attributedText = [[NSAttributedString alloc] initWithString:@"Buy" attributes:attributes];
+    else if (indexPath.section == 1) {
         
-        for (int i = 1; i <= 7; i++) {
-            
-            UILabel *view = (UILabel *) [cell viewWithTag:i];
-            
-            
-            NSArray *sharesLeft = self.game.market.sharesLeft;
-            int bankShareNumber = [sharesLeft[i] intValue];
-            
-            BOOL found = NO;
-            
-            for (NSNumber *number in self.game.chainsInPlay) {
-                
-                if ([number intValue] == i) {
-                    found = YES;
-                    break;
-                }
-                
-            }
-            
-            
-            NSLog(@"%d", found);
-            
-            if (view) {
-                [view removeFromSuperview];
+        NSArray *sharePrices = [self.game determinePrices];
 
-                if (bankShareNumber && !found) {
-                    CGRect frame = view.frame;
-                    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-                    button.frame = frame;
-                    [button setAttributedTitle:view.attributedText forState:UIControlStateNormal];
-                    [button addTarget:self action:@selector(addShare:) forControlEvents:UIControlEventTouchUpInside];
-                    [cell addSubview:button];
-                    
-                    
-                    if (self.game.market.purchaseCount == 3) {
-                        button.enabled = NO;
-                    }
-                    else {
-                        button.enabled = self.marketIsOpen;
-                    }
-                    
-                    
-                }
+        
+        if (![labelView.subviews count]) {
+            UILabel *label = [[UILabel alloc] initWithFrame:labelView.bounds];
+            label.text = @"Price";
+            label.textColor = [UIColor whiteColor];
+            label.textAlignment = NSTextAlignmentCenter;
+            [labelView addSubview:label];
+            
+        }
+        
+        if (![infoView.subviews count]) {
+            
+            CGRect frame = infoView.bounds;
+            frame.size.width /= chainsPossible;
+            
+            for (int i = 1; i <= chainsPossible; i++) {
+                
+                UILabel *priceLabel = [[UILabel alloc] initWithFrame:frame];
+                priceLabel.text = @"X";
+                priceLabel.textAlignment = NSTextAlignmentCenter;
+                priceLabel.textColor = [UIColor whiteColor];
+                [infoView addSubview:priceLabel];
+                frame.origin.x += frame.size.width;
             }
             
         }
+        
+        
+        
+        for (int i = 1; i <= chainsPossible; i++) {
+            UILabel *label = infoView.subviews[i-1];
+            
+            int sharePrice = [sharePrices[i] intValue];
+            if (sharePrice == 0) {
+                label.text = @"-";
+            }
+            else {
+                label.text = @"$";
+                label.text = [label.text stringByAppendingString:[sharePrices[i] stringValue]];
+
+            }
+            
+            
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+//        UILabel *nameLabel = (UILabel *)[cell viewWithTag:100];
+//        NSDictionary *attributes = [nameLabel.attributedText attributesAtIndex:0 effectiveRange:nil];
+//        nameLabel.attributedText = [[NSAttributedString alloc] initWithString:@"Buy" attributes:attributes];
+//        
+//        for (int i = 1; i <= 7; i++) {
+//            
+//            UILabel *view = (UILabel *) [cell viewWithTag:i];
+//            
+//            
+//            NSArray *sharesLeft = self.game.market.sharesLeft;
+//            int bankShareNumber = [sharesLeft[i] intValue];
+//            
+//            BOOL found = NO;
+//            
+//            for (NSNumber *number in self.game.chainsInPlay) {
+//                
+//                if ([number intValue] == i) {
+//                    found = YES;
+//                    break;
+//                }
+//                
+//            }
+//            
+//            
+//            //NSLog(@"%d", found);
+//            
+//            if (view) {
+//                [view removeFromSuperview];
+//
+//                if (bankShareNumber && !found) {
+//                    CGRect frame = view.frame;
+//                    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+//                    button.frame = frame;
+//                    [button setAttributedTitle:view.attributedText forState:UIControlStateNormal];
+//                    [button addTarget:self action:@selector(addShare:) forControlEvents:UIControlEventTouchUpInside];
+//                    [cell addSubview:button];
+//                    
+//                    
+//                    if (self.game.market.purchaseCount == 3) {
+//                        button.enabled = NO;
+//                    }
+//                    else {
+//                        button.enabled = self.marketIsOpen;
+//                    }
+//                    
+//                    
+//                }
+//            }
+//            
+//        }
     }
     
     
@@ -325,7 +434,7 @@
     
 
     
-    NSLog(@"%@", [[sender attributedTitleForState:UIControlStateNormal] string]);
+    //NSLog(@"%@", [[sender attributedTitleForState:UIControlStateNormal] string]);
     
     if (self.game.market.purchaseCount == 3) {
         UIView *superview = sender.superview;

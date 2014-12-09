@@ -22,24 +22,100 @@
 }
 
 
--(NSMutableArray *)sharePrices
+-(NSArray *)sharePrices:(NSArray *)sharesPlayed
 {
-    if (!_sharePrices) {
-        _sharePrices = [[NSMutableArray alloc] initWithCapacity:self.numberOfCompanies+1];
-        NSNumber *number = [NSNumber numberWithInt:0];
-        [_sharePrices addObject:number];
+    NSMutableArray *sharePrices = [[NSMutableArray alloc] init];
+    [sharePrices addObject:[NSNumber numberWithInt:0]];
+    
+    for (int i = 1; i <= self.numberOfCompanies; i++) {
+        [sharePrices addObject:[NSNumber numberWithInt:0]];
+    }
+    
+    
+    
+    for (int i = 1; i <= self.numberOfCompanies; i++) {
         
-        for (int i = 1; i <= self.numberOfCompanies; i++) {
-            NSNumber *number = [NSNumber numberWithInt:0];
-            [_sharePrices setObject:number atIndexedSubscript:i];
+        int shareNumber = [sharesPlayed[i] intValue];
+        int sharePrice = 0;
+        
+        if (shareNumber > 0) {
+            
+            if (shareNumber >=  6) {
+                switch (i) {
+                    case 1:
+                        sharePrice = (shareNumber-1)/10+6;
+                        break;
+                    case 2:
+                        sharePrice = (shareNumber-1)/10+6;
+                        break;
+                    case 3:
+                        sharePrice = (shareNumber-1)/10+7;
+                        break;
+                    case 4:
+                        sharePrice = (shareNumber-1)/10+7;
+                        break;
+                    case 5:
+                        sharePrice = (shareNumber-1)/10+7;
+                        break;
+                    case 6:
+                        sharePrice = (shareNumber-1)/10+8;
+                        break;
+                    case 7:
+                        sharePrice = (shareNumber-1)/10+8;
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }
+            else {
+                switch (i) {
+                    case 1:
+                        sharePrice = shareNumber;
+                        break;
+                    case 2:
+                        sharePrice = shareNumber;
+                        break;
+                    case 3:
+                        sharePrice = shareNumber + 1;
+                        break;
+                    case 4:
+                        sharePrice = shareNumber +1;
+                        break;
+                    case 5:
+                        sharePrice = shareNumber+1;
+                        break;
+                    case 6:
+                        sharePrice = shareNumber+2;
+                        break;
+                    case 7:
+                        sharePrice = shareNumber+2;
+                        break;
+                        
+                    default:
+                        break;
+                }
+                
+            }
             
             
+            
+        
+            sharePrices[i] = [NSNumber numberWithInt:sharePrice];
+        
+        
         }
-        //NSLog(@"share price count %d", [_sharePrices count]);
+        
+        
         
         
     }
-    return _sharePrices;
+    
+    return sharePrices;
+    
+    
+    
+    
 }
 
 

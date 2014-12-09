@@ -621,7 +621,7 @@ const int playerCount = 4;
         UINavigationController *navigation = (UINavigationController *)segue.destinationViewController;
         
         if ([navigation.topViewController isKindOfClass:[MarketTableViewController class]]) {
-            NSLog(@"%@", navigation.topViewController);
+            //NSLog(@"%@", navigation.topViewController);
             MarketTableViewController *marketViewController = (MarketTableViewController *) navigation.topViewController;
             
             marketViewController.marketIsOpen = self.marketIsOpen;
@@ -691,7 +691,7 @@ const int playerCount = 4;
 
 -(void)flipPlayerView
 {
-    [UIView transitionWithView:self.view duration:1 options:UIViewAnimationOptionTransitionFlipFromRight animations:^{
+    [UIView transitionWithView:self.view duration:.25 options:UIViewAnimationOptionTransitionFlipFromRight animations:^{
         
         [self updatePlayerLabel];
         

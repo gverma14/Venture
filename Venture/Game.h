@@ -37,6 +37,9 @@
 @property (nonatomic) int tilesPlayed;
 
 
+-(NSArray *)determinePrices;
+
+
 // Gameplay properties
 @property (nonatomic, strong) NSMutableArray *players;
 @property (nonatomic, strong) Market *market;

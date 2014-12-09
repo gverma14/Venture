@@ -346,5 +346,40 @@
     return _tileRows;
 }
 
+-(NSArray *)chainNumbersOnBoard:(int)totalCompanies
+{
+    
+    NSMutableArray *chainNumbers = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i <= totalCompanies; i ++) {
+        
+        [chainNumbers addObject:[NSNumber numberWithInt:0]];
+    }
+    
+    
+    for (int row = 0; row < self.rowCount; row++) {
+        for (int col = 0; col < self.colCount; col++) {
+            GameBoardTile *tile = [self retrieveTileAtRow:row column:col];
+            
+            if (tile.companyType > 0) {
+                int currentNumber = [chainNumbers[tile.companyType] intValue];
+                currentNumber++;
+                
+                chainNumbers[tile.companyType] = [NSNumber numberWithInt:currentNumber];
+                
+            }
+        }
+        
+        
+    }
+    
+    
+    return chainNumbers;
+    
+    
+    
+}
+
+
 
 @end

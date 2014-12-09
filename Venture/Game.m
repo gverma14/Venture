@@ -287,6 +287,18 @@
 }
 
 
+-(NSArray *)determinePrices
+{
+    NSArray *chain = [self.board chainNumbersOnBoard:chainsPossible];
+    
+    NSArray *sharePrices = [self.market sharePrices:chain];
+    return sharePrices;
+    
+
+    
+}
+
+
 
 
 
