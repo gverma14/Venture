@@ -57,13 +57,7 @@
 -(NSMutableArray *)chainsInPlay
 {
     if (!_chainsInPlay) {
-        _chainsInPlay = [[NSMutableArray alloc] init];
-        
-        for (int i = 1; i <= chainsPossible; i++) {
-            NSNumber *num = [NSNumber numberWithInt:i];
-            [_chainsInPlay addObject:num];
-            
-        }
+        _chainsInPlay = [Game createInitialChainArray:chainsPossible];
     }
     
     return _chainsInPlay;
@@ -298,6 +292,17 @@
     
 }
 
++(NSMutableArray *)createInitialChainArray:(int)numberOfCompanies
+{
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    
+    for (int i = 1; i <= numberOfCompanies; i++) {
+        NSNumber *number = [NSNumber numberWithInt:i];
+        [array addObject:number];
+    }
+    
+    return array;
+}
 
 
 

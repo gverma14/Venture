@@ -17,10 +17,10 @@
 #import "MainMenuButton.h"
 #import "PortfolioView.h"
 #import "MarketTableViewController.h"
+#import "TilePaletteView.h"
 
 
-
-@interface GameViewController ()
+@interface GameViewController () <TilePaletteViewDelegate>
 @property (weak, nonatomic) IBOutlet UIView *gameView;
 @property (strong, nonatomic) Game *game;
 @property (weak, nonatomic) IBOutlet UIView *controlPanelView;
@@ -38,55 +38,46 @@
 @property (nonatomic) double tileScaleFactor;
 
 
+
 @end
 @implementation GameViewController
 
 const int playerCount = 4;
+const double mergerHighlightFactor = 1.2;
 
 
-//const int tileCount = 108;
-//const int placementTileCount = 6;
-
-
-
-
-
-- (double)tileScaleFactor
-{
-    if (!_tileScaleFactor) {
-        _tileScaleFactor = .9;
-    }
-    
-    return _tileScaleFactor;
-}
-
-
--(Game *)game
-{
-    if (!_game) {
-        
-        _game = [[Game alloc] initWithPlayerCount:playerCount];
-        
-    }
-    return _game;
-}
-
--(void) viewWillAppear:(BOOL)animated
-{
-    
-    self.navigationController.navigationBar.translucent = NO;
-    UIColor *color = self.view.backgroundColor;
-    
-    self.navigationController.navigationBar.barTintColor = color;
-}
+#pragma mark - INITIAL SETUP
+////////////
 
 -(void)viewDidLoad
+{
+    [self setup];
+}
+
+// Initialize nav bar, layour game tiles, update player label, update portfolio view
+-(void)setup
+{
+    [self setupNavigationBar];
+    [self layoutTiles];
+    [self updatePlayerLabel];
+    [self updatePortfolioView];
+}
+
+// Set up markers and placed tiles after view appears
+-(void)viewDidAppear:(BOOL)animated
+{
+    
+    [self updateMarks];
+    [self updatePlaced];
+}
+
+// Setup Navigation Bar that includes Venture Logo
+-(void)setupNavigationBar
 {
     UINavigationItem *navigation = self.navigationItem;
     
     CGRect frame = CGRectMake(0, 0, 100, 50);
     UILabel *ventureLabel = [[UILabel alloc] initWithFrame:frame];
-    //ventureLabel.backgroundColor = [UIColor greenColor];
     
     UIFont *font = [UIFont fontWithName:@"optima-bold" size:25];
     NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
@@ -100,70 +91,51 @@ const int playerCount = 4;
     ventureLabel.attributedText = ventureText;
     
     navigation.titleView = ventureLabel;
-    
-    
-    
-    [self layoutTiles];
-    [self updatePlayerLabel];
-    
-    [self updatePortfolioView];
-    //[self setupMarketButton];
-    
-    
-
+    self.navigationController.navigationBar.translucent = NO;
+    UIColor *color = self.view.backgroundColor;
+    self.navigationController.navigationBar.barTintColor = color;
     
 }
 
--(void)setupMarketButton
+// Layout gameboard tiles on game view
+-(void)layoutTiles
 {
-    [self.marketButton setTitle:@"Market" forState:UIControlStateNormal];
-    [self.marketButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
-}
-
--(MainMenuButton *)marketButton
-{
-    if (!_marketButton) {
-        
-        CGRect frame = self.controlPanelView.bounds;
-        frame.size = CGSizeMake(frame.size.height/1.5, frame.size.height/4);
-        frame.origin.x = self.controlPanelView.frame.size.width - frame.size.width;
-        
-        _marketButton = [[MainMenuButton alloc] initWithFrame:frame];
-        
-        _marketButton.center = CGPointMake(_marketButton.center.x, self.controlPanelView.frame.size.height*3.0/4);
-        [self.controlPanelView addSubview:_marketButton];
-        [_marketButton addTarget:self action:@selector(goToMarketScreen:) forControlEvents:UIControlEventTouchUpInside];
-        
-    }
-    return _marketButton;
-}
-
--(void)goToMarketScreen:(id)sender
-{
-    //NSLog(@"tapped");
+    Grid *grid = self.gameGrid;
     
-}
-
--(PortfolioView *)portfolio
-{
-    if (!_portfolio) {
-        CGRect frame = self.controlPanelView.bounds;
-        frame.size.height /=2;
-        frame.origin.y += frame.size.height;
-        
-        _portfolio = [[PortfolioView alloc] initWithFrame:frame];
-        
-        _portfolio.cash = 0;
-        _portfolio.stock = 0;
-        _portfolio.majority = NO;
-        
-        [self.controlPanelView addSubview:_portfolio];
-        
+    
+    for (int row = 0; row < [grid rowCount]; row++) {
+        for (int col = 0; col < [grid columnCount]; col++) {
+            if (row*[grid columnCount]+col < self.game.tileBox.maxPlacementTiles) {
+                //NSLog(@"%d tile no", row*[grid columnCount]+col);
+                
+                CGRect frame = [grid frameOfCellAtRow:0 inColumn:0];
+                frame.size = CGSizeMake(frame.size.width*self.tileScaleFactor, frame.size.height*self.tileScaleFactor);
+                GameBoardTileView *tile = [[GameBoardTileView alloc] initWithFrame:frame];
+                tile.defaultAnimationMode = YES;
+                tile.center = [grid centerOfCellAtRow:row inColumn:col];
+                tile.row = row;
+                tile.col = col;
+                
+                [self.gameView addSubview:tile];
+                
+                
+            }
+        }
     }
     
-    return _portfolio;
+    
+    
 }
+
+
+//////////////////
+
+
+
+
+
+
 
 
 -(void)updatePortfolioView
@@ -186,67 +158,8 @@ const int playerCount = 4;
 }
 
 
--(UILabel *)playerLabel
-{
-    if (!_playerLabel) {
-        
-        CGRect labelFrame = self.controlPanelView.bounds;
-        
-        labelFrame.size.height /= 4;
-        labelFrame.size.width /= 2;
-        
-        
-        
-        
-        _playerLabel = [[UILabel alloc] initWithFrame:labelFrame];
-        _playerLabel.center = CGPointMake(self.controlPanelView.frame.size.width/2, 3.0/4*self.controlPanelView.frame.size.height);
-        
-        //_playerLabel.backgroundColor = [UIColor orangeColor];
-        if (self.currentPlayer) {
-            _playerLabel.text = [NSString stringWithFormat:@"Player %d", [self.game.players indexOfObject:self.currentPlayer]+1];
-        }
-        else {
-            _playerLabel.text = @"Player";
-        }
-        _playerLabel.textAlignment = NSTextAlignmentCenter;
-        _playerLabel.textColor = [UIColor whiteColor];
-        
-        [self.controlPanelView addSubview:_playerLabel];
-        
-        
-        
-    }
-    
-    return _playerLabel;
-}
 
--(void)viewDidAppear:(BOOL)animated
-{
-    
-    [self updateMarks];
-    
-    [self updatePlaced];
 
-    
-}
-
--(Player *)currentPlayer
-{
-    if (!_currentPlayer) {
-        
-        NSArray *players = self.game.players;
-        
-        if (players) {
-            
-            _currentPlayer = players[0];
-            
-        }
-        
-        
-    }
-    
-    return _currentPlayer;
-}
 
 
 
@@ -264,7 +177,6 @@ const int playerCount = 4;
             
             
             GameBoardTileView *view = [self retrieveGameBoardTileViewAtRow:row col:col];
-            //[view addGestureRecognizer: [UITapGestureRecognizer alloc] initwit  ]
             
             
             
@@ -320,7 +232,6 @@ const int playerCount = 4;
                 
                 
                 
-                //NSLog(@"%d index", index);
             }
             
             
@@ -340,6 +251,11 @@ const int playerCount = 4;
     
 }
 
+
+#pragma mark - CREATE COMPANY
+////////////////////////
+
+// Adds a selection palette view to the screen and animates it
 -(void)chooseCompanyTypeWithChains:(NSArray *)chainsInPlay
 {
     
@@ -348,39 +264,16 @@ const int playerCount = 4;
     
     frame.origin.y = self.controlPanelView.bounds.size.height+20;
     
-    UIView *selectionPalette = [[UIView alloc] initWithFrame:frame];
+    //UIView *selectionPalette = [[UIView alloc] initWithFrame:frame];
     
-    //selectionPalette.backgroundColor = [UIColor orangeColor];
+    TilePaletteView *selectionPalette = [[TilePaletteView alloc] initWithFrame:frame chains:self.game.chainsInPlay scaling:.9 activated:YES target:self];
+    
+    
+    
     
     [self.controlPanelView addSubview:selectionPalette];
     selectionPalette.alpha = 0;
-    
-    
-    float buttonScaleFactor = .65;
-    
-    
-    CGRect buttonFrame = CGRectMake(0, 0, selectionPalette.frame.size.height*buttonScaleFactor, selectionPalette.frame.size.height*buttonScaleFactor);
-    
-    int totalButtons = [chainsInPlay count];
-    
-    for (int i = 1; i <= totalButtons; i++) {
-        GameBoardTileView *view = [[GameBoardTileView alloc] initWithFrame:buttonFrame];
-        view.companyType = [chainsInPlay[i-1] intValue];
-        view.empty = NO;
-        
-        
-        
-        
-        float centerX = selectionPalette.frame.size.width/totalButtons/2*(2*i-1);
-        //view.strokeColor = [UIColor orangeColor];
-        view.center = CGPointMake(centerX, selectionPalette.frame.size.height/2);
-        //view.backgroundColor = [UIColor blackColor];
-        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sendCompanyTypeToModel:)];
-        
-        [view addGestureRecognizer:tapGesture];
-        
-        [selectionPalette addSubview:view];
-    }
+
     
     [UIView animateWithDuration:.25 delay:.5 options:UIViewAnimationOptionLayoutSubviews animations:^{
         CGRect newFrame = selectionPalette.frame;
@@ -392,16 +285,10 @@ const int playerCount = 4;
     
     } completion:nil];
     
-    
-    
-    
-    
-    
-    
 }
 
 
-
+// Method that responds to tap from selection palette and changes model accordingly (in this case creates a new company)
 -(void)sendCompanyTypeToModel:(UITapGestureRecognizer *)gesture
 {
     if (gesture.state == UIGestureRecognizerStateEnded) {
@@ -450,6 +337,9 @@ const int playerCount = 4;
 }
 
 
+
+
+
 -(void)chooseTileForMerger:(NSArray *)neighboringTiles
 {
     for (GameBoardTile *tile in neighboringTiles) {
@@ -465,7 +355,6 @@ const int playerCount = 4;
             
             GameBoardTileView *view = [self retrieveGameBoardTileViewAtRow:chainTile.row col:chainTile.column];
             
-            //NSLog(@"row %d col %d", view.row, view.col);
             UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(completeMergerAction:)];
             
             [view addGestureRecognizer:gesture];
@@ -476,7 +365,7 @@ const int playerCount = 4;
             
             
             [UIView transitionWithView:view duration:1 options:options animations:^{
-                view.transform = CGAffineTransformMakeScale(1/self.tileScaleFactor, 1/self.tileScaleFactor);
+                view.transform = CGAffineTransformMakeScale(mergerHighlightFactor, mergerHighlightFactor);
                 view.strokeColor = [UIColor whiteColor];
                 view.lineWidth = 6;
                 view.defaultAnimationMode = NO;
@@ -491,16 +380,7 @@ const int playerCount = 4;
                 
                 
             }];
-//            [UIView animateWithDuration:1 delay:0 options:options animations:^{
-//                
-//                view.transform = CGAffineTransformMakeScale(1.05, 1.05);
-//                view.strokeColor = [UIColor whiteColor];
-//                view.lineWidth = 10;
-//                view.defaultAnimationMode = NO;
-//                [view setNeedsDisplay];
-//                
-//                
-//            } completion:nil];
+
             
             
             
@@ -606,7 +486,6 @@ const int playerCount = 4;
     
     [self toggleTaps:NO];
     
-    //[self performSelector:@selector(performMarketSegue) withObject:self afterDelay:1.5];
     
     
     
@@ -621,7 +500,6 @@ const int playerCount = 4;
         UINavigationController *navigation = (UINavigationController *)segue.destinationViewController;
         
         if ([navigation.topViewController isKindOfClass:[MarketTableViewController class]]) {
-            //NSLog(@"%@", navigation.topViewController);
             MarketTableViewController *marketViewController = (MarketTableViewController *) navigation.topViewController;
             
             marketViewController.marketIsOpen = self.marketIsOpen;
@@ -673,10 +551,7 @@ const int playerCount = 4;
             
             
             
-            
-            //
-            //    [UIView transitionWithView:self.view duration:1 options:UIViewAnimationOptionTransitionFlipFromRight animations:^{  self.view.alpha = 1.0;  } completion:nil];
-            
+
             
         }
     }];
@@ -846,18 +721,18 @@ const int playerCount = 4;
 }
 
 
--(Grid *)controlPanelGrid
-{
-    if (!_controlPanelGrid) {
-        _controlPanelGrid = [[Grid alloc] init];
-        _controlPanelGrid.size = self.controlPanelView.frame.size;
-        _controlPanelGrid.cellAspectRatio = self.controlPanelView.frame.size.width/self.controlPanelView.frame.size.height;
-        _controlPanelGrid.minimumNumberOfCells = 2;
-    }
-    
-    return _controlPanelGrid;
-}
 
+
+
+
+
+
+
+
+#pragma mark - GETTERS
+///////////////////////////////
+
+/// Return game grid for game view
 -(Grid *)gameGrid
 {
     if (!_gameGrid) {
@@ -871,41 +746,153 @@ const int playerCount = 4;
     return _gameGrid;
 }
 
-
--(void)layoutTiles
+/// Retrieve current player on screen defaults to first player in players array of self.game if none is set
+-(Player *)currentPlayer
 {
-    
-    Grid *grid = self.gameGrid;
-    
-    
-    for (int row = 0; row < [grid rowCount]; row++) {
-        for (int col = 0; col < [grid columnCount]; col++) {
-            if (row*[grid columnCount]+col < self.game.tileBox.maxPlacementTiles) {
-                //NSLog(@"%d tile no", row*[grid columnCount]+col);
-                
-                CGRect frame = [grid frameOfCellAtRow:0 inColumn:0];
-                frame.size = CGSizeMake(frame.size.width*self.tileScaleFactor, frame.size.height*self.tileScaleFactor);
-                GameBoardTileView *tile = [[GameBoardTileView alloc] initWithFrame:frame];
-                tile.defaultAnimationMode = YES;
-                tile.center = [grid centerOfCellAtRow:row inColumn:col];
-                tile.row = row;
-                tile.col = col;
-                //NSLog(@"tile center %f %f", tile.center.x, tile.center.y);
-                
-                [self.gameView addSubview:tile];
-                
-                
-            }
+    if (!_currentPlayer) {
+        
+        NSArray *players = self.game.players;
+        
+        if (players) {
+            
+            _currentPlayer = players[0];
+            
         }
+        
+        
     }
     
-    //NSLog(@"finished");
+    return _currentPlayer;
+}
+
+
+// Returns portfolio view currently on screen, creates default view of all zeroes if nonexistent
+-(PortfolioView *)portfolio
+{
+    if (!_portfolio) {
+        CGRect frame = self.controlPanelView.bounds;
+        frame.size.height /=2;
+        frame.origin.y += frame.size.height;
+        
+        _portfolio = [[PortfolioView alloc] initWithFrame:frame];
+        
+        _portfolio.cash = 0;
+        _portfolio.stock = 0;
+        _portfolio.majority = NO;
+        
+        [self.controlPanelView addSubview:_portfolio];
+        
+    }
     
+    return _portfolio;
+}
+
+
+// Returns the player name label that appears on screen, creates one if nonexistent
+-(UILabel *)playerLabel
+{
+    if (!_playerLabel) {
+        
+        CGRect labelFrame = self.controlPanelView.bounds;
+        
+        labelFrame.size.height /= 4;
+        labelFrame.size.width /= 2;
+        
+        
+        
+        
+        _playerLabel = [[UILabel alloc] initWithFrame:labelFrame];
+        _playerLabel.center = CGPointMake(self.controlPanelView.frame.size.width/2, 3.0/4*self.controlPanelView.frame.size.height);
+        
+        if (self.currentPlayer) {
+            _playerLabel.text = [NSString stringWithFormat:@"Player %d", [self.game.players indexOfObject:self.currentPlayer]+1];
+        }
+        else {
+            _playerLabel.text = @"Player";
+        }
+        _playerLabel.textAlignment = NSTextAlignmentCenter;
+        _playerLabel.textColor = [UIColor whiteColor];
+        
+        [self.controlPanelView addSubview:_playerLabel];
+        
+        
+        
+    }
     
+    return _playerLabel;
+}
+
+// Initializes game object with player count constant
+-(Game *)game
+{
+    if (!_game) {
+        
+        _game = [[Game alloc] initWithPlayerCount:playerCount];
+        
+    }
+    return _game;
 }
 
 
 
+// Scale factor for drawing tiles within the game grid to adjust the spacing between each other
+- (double)tileScaleFactor
+{
+    if (!_tileScaleFactor) {
+        _tileScaleFactor = .9;
+    }
+    
+    return _tileScaleFactor;
+}
+
+
+#pragma mark - UNUSED
+/////////////////////////////////
+
+
+-(void)setupMarketButton
+{
+    [self.marketButton setTitle:@"Market" forState:UIControlStateNormal];
+    [self.marketButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    
+}
+
+-(MainMenuButton *)marketButton
+{
+    if (!_marketButton) {
+        
+        CGRect frame = self.controlPanelView.bounds;
+        frame.size = CGSizeMake(frame.size.height/1.5, frame.size.height/4);
+        frame.origin.x = self.controlPanelView.frame.size.width - frame.size.width;
+        
+        _marketButton = [[MainMenuButton alloc] initWithFrame:frame];
+        
+        _marketButton.center = CGPointMake(_marketButton.center.x, self.controlPanelView.frame.size.height*3.0/4);
+        [self.controlPanelView addSubview:_marketButton];
+        [_marketButton addTarget:self action:@selector(goToMarketScreen:) forControlEvents:UIControlEventTouchUpInside];
+        
+    }
+    return _marketButton;
+}
+
+-(void)goToMarketScreen:(id)sender
+{
+    //NSLog(@"tapped");
+    
+}
+
+// Return the grid for the control panel view
+-(Grid *)controlPanelGrid
+{
+    if (!_controlPanelGrid) {
+        _controlPanelGrid = [[Grid alloc] init];
+        _controlPanelGrid.size = self.controlPanelView.frame.size;
+        _controlPanelGrid.cellAspectRatio = self.controlPanelView.frame.size.width/self.controlPanelView.frame.size.height;
+        _controlPanelGrid.minimumNumberOfCells = 2;
+    }
+    
+    return _controlPanelGrid;
+}
 
 
 

@@ -45,6 +45,8 @@
 @property (nonatomic, strong) Market *market;
 
 
++(NSMutableArray *)createInitialChainArray:(int)numberOfCompanies;
+
 @end
 
 static const int chainsPossible = 7;

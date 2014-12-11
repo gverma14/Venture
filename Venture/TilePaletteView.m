@@ -10,25 +10,37 @@
 
 @implementation TilePaletteView
 
--(instancetype)initWithFrame:(CGRect)frame chains:(int)chainsPossible
+-(instancetype)initWithFrame:(CGRect)frame chains:(NSArray *)chainsInPlay scaling:(double)tileScaleFactor activated:(BOOL)activated target:(id <TilePaletteViewDelegate>)delegate
 {
     self = [super initWithFrame:frame];
     
+    int totalButtonCount = [chainsInPlay count];
+    
     CGRect tileFrame = self.bounds;
-    tileFrame.size.width *= (.9/chainsPossible);
+    tileFrame.size.width *= (tileScaleFactor/totalButtonCount);
     tileFrame.size.height = tileFrame.size.width;
     
-    for (int i = 1; i<=chainsPossible; i++) {
+    
+    
+    for (int i = 1; i<=totalButtonCount; i++) {
         GameBoardTileView *view = [[GameBoardTileView alloc] initWithFrame:tileFrame];
-        view.companyType = i;
+        view.companyType = [chainsInPlay[i-1] intValue];
         view.empty = NO;
         
-        float centerX = frame.size.width/chainsPossible/2 * (2* i -1);
+        float centerX = frame.size.width/totalButtonCount/2 * (2* i -1);
         
         view.center = CGPointMake(centerX, frame.size.height/2);
         
         [self addSubview:view];
         
+        if (activated) {
+            UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:delegate action:@selector(sendCompanyTypeToModel:)];
+            [view addGestureRecognizer:tapGesture];
+
+        }
+        
+        
+
         
 
         

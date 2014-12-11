@@ -10,9 +10,18 @@
 #import "GameBoardTileView.h"
 
 
+@protocol TilePaletteViewDelegate
+
+-(void)sendCompanyTypeToModel:(UITapGestureRecognizer *)gesture;
+
+@end
+
+
+
+
 @interface TilePaletteView : UIView
 
--(instancetype)initWithFrame:(CGRect)frame chains:(int)chainsPossible;
+-(instancetype)initWithFrame:(CGRect)frame chains:(NSArray *)chainsInPlay scaling:(double)tileScaleFactor activated:(BOOL)activated target:(id <TilePaletteViewDelegate>)delegate;
 
 
 

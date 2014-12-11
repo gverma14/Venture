@@ -266,7 +266,10 @@
             //infoView.backgroundColor = [UIColor whiteColor] ;
             CGRect frame = infoView.bounds;
             
-            TilePaletteView *paletteView = [[TilePaletteView alloc] initWithFrame:frame chains:chainsPossible];
+            
+            
+            TilePaletteView *paletteView = [[TilePaletteView alloc] initWithFrame:frame chains:[Game createInitialChainArray:chainsPossible] scaling:.85  activated:NO target:nil];
+            
             
             [infoView addSubview:paletteView];
             
@@ -453,6 +456,9 @@
     
     
 }
+
+
+
 
 
 
