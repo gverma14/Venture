@@ -24,8 +24,8 @@
 
 /// Game board actions
 -(void)completeMergerWithTile:(GameBoardTile *)mergerTile;
--(void)startCompanyAtTile:(GameBoardTile *)tile withCompanyType:(NSNumber *)companyType forPlayer:(Player *)player;
--(NSArray *) chooseTileAtRow:(int)row column:(int)col forPlayer:(Player *)player; ///Returns an array of the highest chain length neighboring tiles
+-(void)startCompanyAtTile:(GameBoardTile *)tile withCompanyType:(NSNumber *)companyType;
+-(NSArray *) chooseTileAtRow:(int)row column:(int)col; ///Returns an array of the highest chain length neighboring tiles
 
 
 
@@ -36,6 +36,9 @@
 @property (strong, nonatomic) NSMutableArray *chainsInPlay;
 @property (nonatomic) int tilesPlayed;
 
+-(void)addShare:(int)companyType;
+
+-(void)endOfTurn;
 
 -(NSArray *)determinePrices;
 
@@ -43,6 +46,11 @@
 // Gameplay properties
 @property (nonatomic, strong) NSMutableArray *players;
 @property (nonatomic, strong) Market *market;
+
+/// Retrieve current player defaults to first player in players array if none is set
+@property (nonatomic, strong) Player *currentPlayer;
+
+-(void)completePlayerTurn;
 
 
 +(NSMutableArray *)createInitialChainArray:(int)numberOfCompanies;

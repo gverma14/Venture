@@ -27,11 +27,11 @@
 @property (strong, nonatomic) Grid *controlPanelGrid;
 @property (strong, nonatomic) GameBoardTile *currentTileToBeChanged;
 @property (strong, nonatomic) Grid *gameGrid;
-@property (strong, nonatomic) Player *currentPlayer;
+
 @property (strong, nonatomic) UILabel *playerLabel;
 @property (strong, nonatomic) PortfolioView *portfolio;
 @property (strong, nonatomic) MainMenuButton *marketButton;
-@property (nonatomic) BOOL marketIsOpen;
+
 
 //@property (strong, nonatomic) Grid *grid;
 
@@ -47,7 +47,7 @@ const double mergerHighlightFactor = 1.2;
 
 
 #pragma mark - INITIAL SETUP
-////////////
+/////////////////////////
 
 -(void)viewDidLoad
 {
@@ -129,44 +129,38 @@ const double mergerHighlightFactor = 1.2;
 }
 
 
-//////////////////
+////////////////////////////////////////
 
 
 
 
 
+#pragma mark - STATUS UPDATES
+////////////////
 
 
 
+// Update the portfolio view onscreen
 -(void)updatePortfolioView
 {
-    self.portfolio.cash = self.currentPlayer.cash;
-    
-    
-    
-    
+    self.portfolio.cash = self.game.currentPlayer.cash;
 }
 
+// update the current player label according to the model
 -(void)updatePlayerLabel
 {
-    if (self.currentPlayer) {
-        self.playerLabel.text = [NSString stringWithFormat:@"Player %d", [self.game.players indexOfObject:self.currentPlayer]+1];
+    if (self.game.currentPlayer) {
+        self.playerLabel.text = [NSString stringWithFormat:@"Player %d", [self.game.players indexOfObject:self.game.currentPlayer]+1];
     }
     else {
         self.playerLabel.text = @"Player";
     }
 }
 
-
-
-
-
-
-
 -(void)updateMarks
 {
     
-    NSArray *stack = self.currentPlayer.placementTileStack;
+    NSArray *stack = self.game.currentPlayer.placementTileStack;
     
     for (id obj in stack) {
         if ([obj isKindOfClass:[PlacementTile class]]) {
@@ -194,6 +188,7 @@ const double mergerHighlightFactor = 1.2;
     }
     
 }
+
 
 -(void)eraseAllMarks
 {
@@ -253,7 +248,7 @@ const double mergerHighlightFactor = 1.2;
 
 
 #pragma mark - CREATE COMPANY
-////////////////////////
+//////////////////////////////////
 
 // Adds a selection palette view to the screen and animates it
 -(void)chooseCompanyTypeWithChains:(NSArray *)chainsInPlay
@@ -300,7 +295,7 @@ const double mergerHighlightFactor = 1.2;
                 
                 
                 
-                [self.game startCompanyAtTile:self.currentTileToBeChanged withCompanyType:[NSNumber numberWithInt:companyType] forPlayer:self.currentPlayer];
+                [self.game startCompanyAtTile:self.currentTileToBeChanged withCompanyType:[NSNumber numberWithInt:companyType]];
                 [self updatePlaced];
                 self.currentTileToBeChanged = nil;
                 
@@ -333,18 +328,25 @@ const double mergerHighlightFactor = 1.2;
         
     }
     
-    self.marketIsOpen = YES;
+    
 }
 
 
 
 
 
+
+#pragma mark - EQUAL CHAIN MERGERS
+
+// Activates highlighting animation for two chains of equal length.
+// Needed for selection of merger
 -(void)chooseTileForMerger:(NSArray *)neighboringTiles
 {
     for (GameBoardTile *tile in neighboringTiles) {
         
         NSMutableArray *previous = [[NSMutableArray alloc] init];
+        
+        // Use to retrieve the tile objects in the chain
         [self.game.board findLengthOfChainAtRow:tile.row column:tile.column withPreviousTiles:previous];
         
         
@@ -398,6 +400,32 @@ const double mergerHighlightFactor = 1.2;
 }
 
 
+// Action to be completed after a chain is selected to be the surviving chain
+// Information is sent to the model and the view is then updated to reflect the new model status
+-(void)completeMergerAction:(UITapGestureRecognizer *)gesture
+{
+    //NSLog(@"tapped");
+    
+    [self stopAllAnimation];
+    GameBoardTileView *view = (GameBoardTileView *) gesture.view;
+    
+    
+    GameBoardTile *tile = [self.game.board retrieveTileAtRow:view.row column:view.col];
+    
+    [self.game completeMergerWithTile:tile];
+    
+    [self updatePlaced];
+    
+    
+    
+    [self toggleNextPlayer];
+    
+    
+}
+
+
+
+// Returns highlighting tiles back to normal static state
 -(void)stopAllAnimation
 {
     for (GameBoardTileView *view in self.gameView.subviews) {
@@ -433,28 +461,9 @@ const double mergerHighlightFactor = 1.2;
     
 }
 
--(void)completeMergerAction:(UITapGestureRecognizer *)gesture
-{
-    //NSLog(@"tapped");
-    
-    [self stopAllAnimation];
-    GameBoardTileView *view = (GameBoardTileView *) gesture.view;
-    
-    
-    GameBoardTile *tile = [self.game.board retrieveTileAtRow:view.row column:view.col];
-    
-    [self.game completeMergerWithTile:tile];
-    
-    [self updatePlaced];
-    
-    
-    
-    [self toggleNextPlayer];
-    self.marketIsOpen = YES;
-    
-}
 
-
+#pragma mark - END OF TURN
+// Animates the on screen view of the next player button
 -(void)toggleNextPlayer
 {
     CGRect controlFrame = self.controlPanelView.bounds;
@@ -493,37 +502,14 @@ const double mergerHighlightFactor = 1.2;
     
 }
 
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([segue.identifier isEqualToString:@"marketSegue"]) {
-        
-        UINavigationController *navigation = (UINavigationController *)segue.destinationViewController;
-        
-        if ([navigation.topViewController isKindOfClass:[MarketTableViewController class]]) {
-            MarketTableViewController *marketViewController = (MarketTableViewController *) navigation.topViewController;
-            
-            marketViewController.marketIsOpen = self.marketIsOpen;
-            
-            if (!marketViewController.game) {
-                marketViewController.game = self.game;
-            }
-            
-            
-        }
-    }
-    
-}
 
-
--(void)performMarketSegue
-{
-    [self performSegueWithIdentifier:@"marketSegue" sender:self.navigationItem.rightBarButtonItem];
-
-}
-
+// Action to be completed when next player button pressed
+// calls for model to be updated
 -(void)nextPlayerButtonPressed:(id)sender
 {
-    self.marketIsOpen = NO;
+    
+    
+    
     
     UIButton *button = (UIButton *)sender;
     
@@ -535,15 +521,9 @@ const double mergerHighlightFactor = 1.2;
         if (finished) {
             [button removeFromSuperview];
             
+            [self.game completePlayerTurn];
             
-            int playerIndex = [self.game.players indexOfObject:self.currentPlayer];
             
-            if (playerIndex == [self.game.players count] -1) {
-                self.currentPlayer = self.game.players[0];
-            }
-            else {
-                self.currentPlayer = self.game.players[playerIndex+1];
-            }
             
             [self eraseAllMarks];
             
@@ -551,19 +531,20 @@ const double mergerHighlightFactor = 1.2;
             
             
             
-
+            
             
         }
     }];
     
     [self toggleTaps:YES];
     
-    self.game.market.purchaseCount = 0;
     
     
     
 }
 
+// flips the player view when the turn is over
+// activates the animations and updates the player label to reflect current status
 -(void)flipPlayerView
 {
     [UIView transitionWithView:self.view duration:.25 options:UIViewAnimationOptionTransitionFlipFromRight animations:^{
@@ -580,6 +561,20 @@ const double mergerHighlightFactor = 1.2;
     }];
 }
 
+
+
+
+
+
+
+
+
+
+#pragma mark - GAMEBOARD
+/////////////////////////////////
+
+
+// Registers a game play tile tap on the game board
 -(void)tap:(UITapGestureRecognizer *)gesture
 {
     if(gesture.state == UIGestureRecognizerStateEnded) {
@@ -593,7 +588,7 @@ const double mergerHighlightFactor = 1.2;
             
             if (!gameTileView.isMarked) {
                 
-                NSArray *neighboringTiles = [self.game chooseTileAtRow:row column:col forPlayer:self.currentPlayer];
+                NSArray *neighboringTiles = [self.game chooseTileAtRow:row column:col];
                 GameBoardTile *thisTile = [self.game.board retrieveTileAtRow:row column:col];
                 
                 if (neighboringTiles) {
@@ -679,8 +674,9 @@ const double mergerHighlightFactor = 1.2;
                 [self updateMarks];
                 
                 [gameTileView removeGestureRecognizer:[gameTileView.gestureRecognizers objectAtIndex:0]];
+                NSLog(@"%d chains", [self.game.chainsInPlay count]);
                 
-                self.marketIsOpen = abs([self.game.chainsInPlay count] - 8);
+                [self.game endOfTurn];
                 
                 
             }
@@ -694,11 +690,7 @@ const double mergerHighlightFactor = 1.2;
     }
 }
 
-
-
-
-
-
+// Retrieves the specific game tile view among the gameview's subviews using row and column notation
 -(GameBoardTileView *)retrieveGameBoardTileViewAtRow:(int)rowIndex col:(int)colIndex
 {
     int gridIndex = rowIndex*self.gameGrid.columnCount+colIndex;
@@ -708,6 +700,8 @@ const double mergerHighlightFactor = 1.2;
     
 }
 
+// If a game tile is marked, it toggles the game tile to be unmarked and filled with color (white if no company type)
+// If a game tile is colored (white if no company type), it toggles the game tile to be marked
 -(void)toggleGameTileAt:(int)rowIndex col:(int)colIndex
 {
     
@@ -725,6 +719,28 @@ const double mergerHighlightFactor = 1.2;
 
 
 
+#pragma mark - MARKET
+//////////////////////////
+
+// Sends relevant information to the Market View Controller
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"marketSegue"]) {
+        
+        UINavigationController *navigation = (UINavigationController *)segue.destinationViewController;
+        
+        if ([navigation.topViewController isKindOfClass:[MarketTableViewController class]]) {
+            MarketTableViewController *marketViewController = (MarketTableViewController *) navigation.topViewController;
+                        
+            if (!marketViewController.game) {
+                marketViewController.game = self.game;
+            }
+            
+            
+        }
+    }
+    
+}
 
 
 
@@ -746,24 +762,7 @@ const double mergerHighlightFactor = 1.2;
     return _gameGrid;
 }
 
-/// Retrieve current player on screen defaults to first player in players array of self.game if none is set
--(Player *)currentPlayer
-{
-    if (!_currentPlayer) {
-        
-        NSArray *players = self.game.players;
-        
-        if (players) {
-            
-            _currentPlayer = players[0];
-            
-        }
-        
-        
-    }
-    
-    return _currentPlayer;
-}
+
 
 
 // Returns portfolio view currently on screen, creates default view of all zeroes if nonexistent
@@ -804,8 +803,8 @@ const double mergerHighlightFactor = 1.2;
         _playerLabel = [[UILabel alloc] initWithFrame:labelFrame];
         _playerLabel.center = CGPointMake(self.controlPanelView.frame.size.width/2, 3.0/4*self.controlPanelView.frame.size.height);
         
-        if (self.currentPlayer) {
-            _playerLabel.text = [NSString stringWithFormat:@"Player %d", [self.game.players indexOfObject:self.currentPlayer]+1];
+        if (self.game.currentPlayer) {
+            _playerLabel.text = [NSString stringWithFormat:@"Player %d", [self.game.players indexOfObject:self.game.currentPlayer]+1];
         }
         else {
             _playerLabel.text = @"Player";
@@ -895,6 +894,11 @@ const double mergerHighlightFactor = 1.2;
 }
 
 
+-(void)performMarketSegue
+{
+    [self performSegueWithIdentifier:@"marketSegue" sender:self.navigationItem.rightBarButtonItem];
+    
+}
 
 
 

@@ -102,9 +102,10 @@
 ///// Returns array of one tile if there is only one highest chain tile
 ///// Returns array of the same tile if there are only neutral tiles surrounding and a color is needed
 
--(NSArray *)chooseTileAtRow:(int)row column:(int)col forPlayer:(Player *)player
+-(NSArray *)chooseTileAtRow:(int)row column:(int)col
 {
     
+    Player *player = self.currentPlayer;
     
     
     PlacementTile *oldPlacementTile = nil;
@@ -234,12 +235,14 @@
     
     [self.chainsInPlay addObjectsFromArray:changedCompanies];
     //NSLog(@"%d chains in play", [self.chainsInPlay count]);
+    self.market.open = YES;
     
 }
 
 
--(void)startCompanyAtTile:(GameBoardTile *)tile withCompanyType:(NSNumber *)companyType forPlayer:(Player *)player
+-(void)startCompanyAtTile:(GameBoardTile *)tile withCompanyType:(NSNumber *)companyType
 {
+    Player *player = self.currentPlayer;
     NSMutableArray *previous = [[NSMutableArray alloc] initWithObjects:tile, nil];
     NSMutableArray *changedCompanies = [[NSMutableArray alloc] init];
     
@@ -265,7 +268,7 @@
     
     
 
-    
+    self.market.open = YES;
     
     
     
@@ -305,33 +308,72 @@
 }
 
 
+-(Player *)currentPlayer
+{
+    if (!_currentPlayer) {
+        
+        NSArray *players = self.players;
+        
+        if (players) {
+            
+            _currentPlayer = players[0];
+            
+        }
+        
+        
+    }
+    
+    return _currentPlayer;
+}
 
 
+-(void)completePlayerTurn
+{
+    self.market.open = NO;
+    int playerIndex = [self.players indexOfObject:self.currentPlayer];
+    
+    if (playerIndex == [self.players count] -1) {
+        self.currentPlayer = self.players[0];
+    }
+    else {
+        self.currentPlayer = self.players[playerIndex+1];
+    }
+    
+    self.market.purchaseCount = 0;
+    
+}
+
+-(void)endOfTurn
+{
+    self.market.open = abs([self.chainsInPlay count] - chainsPossible);
+}
 
 
-//
-//-(NSMutableArray *)placementTileStack
-//{
-//    if (!_placementTileStack) {
-//        _placementTileStack = [[NSMutableArray alloc] init];
-//
-//
-//        for (int i = 0 ; i < self.placementTileCount; i++) {
-//            PlacementTile *placementTile = [self.tileBox drawRandomTile];
-//
-//            [_placementTileStack addObject:placementTile];
-//
-//        }
-//
-//
-//    }
-//
-//
-//    return _placementTileStack;
-//}
-
-
-
+-(void)addShare:(int)companyType
+{
+    int bankShareNumber = [self.market.sharesLeft[companyType] intValue];
+    
+    
+    if (bankShareNumber > 0) {
+        bankShareNumber--;
+        
+        
+        int playerShareNumber = [self.currentPlayer.sharesOwned[companyType] intValue];
+        playerShareNumber++;
+        
+        
+        
+        self.market.purchaseCount++;
+        
+        self.market.sharesLeft[companyType] = [NSNumber numberWithInt:bankShareNumber];
+        self.currentPlayer.sharesOwned[companyType] = [NSNumber numberWithInt:playerShareNumber];
+        
+        
+        
+        
+    }
+    
+}
 
 
 

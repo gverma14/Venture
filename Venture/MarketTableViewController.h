@@ -16,9 +16,4 @@
 
 @property (nonatomic, strong) Game *game;
 
-@property (nonatomic, strong) Player *currentPlayer;
-@property (nonatomic) BOOL marketIsOpen;
-
-
-
 @end

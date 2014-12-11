@@ -14,6 +14,7 @@
 @property (nonatomic, strong) NSMutableArray *sharesLeft;
 @property (nonatomic) int numberOfCompanies;
 @property (nonatomic) int purchaseCount;
+@property (nonatomic, getter = isOpen) BOOL open;
 
 
 -(instancetype)initWithNumberCompanies:(int)number;
