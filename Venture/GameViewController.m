@@ -259,10 +259,8 @@ const double mergerHighlightFactor = 1.2;
     
     frame.origin.y = self.controlPanelView.bounds.size.height+20;
     
-    //UIView *selectionPalette = [[UIView alloc] initWithFrame:frame];
     
-    TilePaletteView *selectionPalette = [[TilePaletteView alloc] initWithFrame:frame chains:self.game.chainsInPlay scaling:.9 activated:YES target:self];
-    
+    TilePaletteView *selectionPalette = [[TilePaletteView alloc] initWithFrame:frame chains:self.game.chainsInPlay total:chainsPossible scaling:.9 activated:YES target:self multiRow:NO resizing:NO];
     
     
     
@@ -674,7 +672,6 @@ const double mergerHighlightFactor = 1.2;
                 [self updateMarks];
                 
                 [gameTileView removeGestureRecognizer:[gameTileView.gestureRecognizers objectAtIndex:0]];
-                NSLog(@"%d chains", [self.game.chainsInPlay count]);
                 
                 [self.game endOfTurn];
                 

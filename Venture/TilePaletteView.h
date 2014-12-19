@@ -21,7 +21,8 @@
 
 @interface TilePaletteView : UIView
 
--(instancetype)initWithFrame:(CGRect)frame chains:(NSArray *)chainsInPlay scaling:(double)tileScaleFactor activated:(BOOL)activated target:(id <TilePaletteViewDelegate>)delegate;
+-(instancetype)initWithFrame:(CGRect)frame chains:(NSArray *)chainsInPlay total:(int)chainsPossible scaling:(double)tileScaleFactor activated:(BOOL)activated target:(id <TilePaletteViewDelegate>)delegate multiRow:(BOOL)multiLeveled resizing:(BOOL)resizeActivated;
+
 
 
 

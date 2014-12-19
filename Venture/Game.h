@@ -42,6 +42,8 @@
 
 -(NSArray *)determinePrices;
 
+-(void)restoreChains:(NSArray *)changedCompanyTiles;
+
 
 // Gameplay properties
 @property (nonatomic, strong) NSMutableArray *players;

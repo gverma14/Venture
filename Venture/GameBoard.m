@@ -380,6 +380,48 @@
     
 }
 
+-(NSArray *)companyTypesOnBoard
+{
+    NSMutableArray *companyTypesArray = [[NSMutableArray alloc] init];
+    
+    for (int row = 0; row < self.rowCount; row++) {
+        for (int col = 0; col < self.colCount; col++) {
+            
+            GameBoardTile *tile = [self retrieveTileAtRow:row column:col];
+            
+            if (tile.companyType > 0) {
+                NSNumber *number = [NSNumber numberWithInt:tile.companyType];
+                
+                if (![companyTypesArray containsObject:number]) {
+                    [companyTypesArray addObject:number];
+                    
+                }
+            }
+            
+            
+        }
+        
+        
+    }
+    
+    [companyTypesArray sortUsingComparator:^(NSNumber *obj1, NSNumber *obj2) {
+        if ([obj1 intValue] > [obj2 intValue]) {
+            return NSOrderedDescending;
+        }
+        
+        if ([obj1 intValue] < [obj2 intValue]) {
+            return NSOrderedAscending;
+        }
+        
+        return NSOrderedSame;
+        
+    }];
+    
+    return companyTypesArray;
+    
+    
+}
+
 
 
 @end

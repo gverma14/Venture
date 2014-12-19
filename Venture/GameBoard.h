@@ -16,6 +16,7 @@
 @property (nonatomic) int rowCount;
 @property (nonatomic) int colCount;
 
+-(NSArray *)companyTypesOnBoard;
 
 - (NSArray *)chainNumbersOnBoard:(int)totalCompanies;
 

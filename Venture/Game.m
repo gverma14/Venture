@@ -182,7 +182,10 @@
                     }
                 }
                 
-                [self.chainsInPlay addObjectsFromArray:changedCompanyTiles];
+                [self restoreChains:changedCompanyTiles];
+                
+                
+                
                 
                 //NSLog(@"%d changed companies", [changedCompanyTiles count]);
             }
@@ -219,6 +222,25 @@
     
 }
 
+-(void)restoreChains:(NSArray *)changedCompanyTiles
+{
+    [self.chainsInPlay addObjectsFromArray:changedCompanyTiles];
+    [self.chainsInPlay sortUsingComparator:^(NSNumber *obj1, NSNumber *obj2){
+        
+        if ([obj1 intValue] > [obj2 intValue]) {
+            return NSOrderedDescending;
+        }
+        
+        if ([obj1 intValue] < [obj2 intValue]) {
+            return NSOrderedAscending;
+        }
+        
+        return NSOrderedSame;
+        
+    }];
+    
+}
+
 
 
 -(void)completeMergerWithTile:(GameBoardTile *)mergerTile
@@ -231,10 +253,8 @@
     
     [self.board changeNeighborsOfTile:mergerTile toCompanyType:mergerTile.companyType withPreviousTiles:previous withChangedCompanyTiles:changedCompanies];
     
+    [self restoreChains:changedCompanies];
     
-    
-    [self.chainsInPlay addObjectsFromArray:changedCompanies];
-    //NSLog(@"%d chains in play", [self.chainsInPlay count]);
     self.market.open = YES;
     
 }

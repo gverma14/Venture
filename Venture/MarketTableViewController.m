@@ -11,7 +11,7 @@
 #import "GameBoardTileView.h"
 #import "TilePaletteView.h"
 
-@interface MarketTableViewController ()
+@interface MarketTableViewController () <TilePaletteViewDelegate>
 
 @property (strong, nonatomic) UILabel *nameLabel;
 @property (strong, nonatomic) UILabel *priceLabel;
@@ -39,6 +39,7 @@
     [self setupNavBar];
     
     NSLog(@"Market Open:%d", self.game.market.isOpen);
+    
     
     
     
@@ -91,7 +92,6 @@
         
         return [self.game.players count]+2;
     }
-    
     return 1;
 }
 - (IBAction)testPress:(UIBarButtonItem *)sender {
@@ -102,6 +102,11 @@
 }
 
 
+-(void)sendCompanyTypeToModel:(UITapGestureRecognizer *)gesture
+{
+    NSLog(@"tapped");
+    
+}
 
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -123,11 +128,13 @@
             
             // Set up name label and price label
             if (![labelView.subviews count]) {
+                
                 if (indexPath.row > [self.game.players count]) {
                     UILabel *label = [[UILabel alloc] initWithFrame:labelView.bounds];
                     label.text = @"X";
                     label.textAlignment = NSTextAlignmentCenter;
                     label.textColor = [UIColor whiteColor];
+                    
                     [labelView addSubview:label];
                     
                 }
@@ -164,6 +171,8 @@
             
             // Set up company share number labels
             if (![infoView.subviews count]) {
+                
+                
                 CGRect frame = infoView.bounds;
                 frame.size.width /= chainsPossible;
                 
@@ -253,7 +262,8 @@
             
             
             
-            TilePaletteView *paletteView = [[TilePaletteView alloc] initWithFrame:frame chains:[Game createInitialChainArray:chainsPossible] scaling:.85  activated:NO target:nil];
+            TilePaletteView *paletteView = [[TilePaletteView alloc] initWithFrame:frame chains:[Game createInitialChainArray:chainsPossible] total:chainsPossible scaling:.9 activated:NO target:self multiRow:NO resizing:NO];
+            
             
             
             [infoView addSubview:paletteView];
@@ -318,12 +328,53 @@
         
 
     }
+    else {
+        CGRect frame = cell.contentView.bounds;
+        
+        NSLog(@"%f %f %f %f", frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
+        
+        frame.origin.x += 20;
+        
+        frame.size.width -= 40;
+        
+        if (self.game.market.isOpen) {
+            NSArray *chainsOnBoard = [self.game.board companyTypesOnBoard];
+            
+            TilePaletteView *palette = [[TilePaletteView alloc] initWithFrame:frame chains:chainsOnBoard  total:chainsPossible scaling:.9 activated:YES target:self multiRow:YES resizing:YES];
+            
+            [cell.contentView addSubview:palette];
+            
+            
+        }
+        
+        
+        
+        
+        
+    }
+    
     
     
     return cell;
 }
 
-
+- (CGFloat)tableView:(UITableView *)tableView
+heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"marketCell"];
+    
+    if (indexPath.section == 2) {
+        
+        return cell.frame.size.height*1.1;
+        
+        
+        
+    }
+    
+    return cell.frame.size.height;
+    
+    
+}
 -(void)addShare:(UIButton *)sender
 {
     
