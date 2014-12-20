@@ -11,7 +11,7 @@
 #import "GameBoardTileView.h"
 #import "TilePaletteView.h"
 
-@interface MarketTableViewController () <TilePaletteViewDelegate>
+@interface MarketTableViewController ()
 
 @property (strong, nonatomic) UILabel *nameLabel;
 @property (strong, nonatomic) UILabel *priceLabel;
@@ -26,62 +26,33 @@
 @implementation MarketTableViewController
 
 
-- (IBAction)doneButtonPressed:(UIBarButtonItem *)sender {
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
-    
-}
+
 
 - (void) viewDidLoad
 {
     self.tableView.scrollEnabled = NO;
 
-    [self setupNavBar];
+    
     
     NSLog(@"Market Open:%d", self.game.market.isOpen);
     
+    if (self.game) {
+        NSLog(@"exists");
+    }
+    NSLog(@"%@ self", self);
+    NSLog(@"%@ parent controller", self.parentViewController);
     
-    
-    
-    
+    //self.tableView.backgroundColor = [UIColor grayColor];
 }
 
 
 
--(void)setupNavBar
-{
-    self.navigationController.navigationBar.translucent = NO;
-    UIColor *color = self.view.backgroundColor;
-    
-    
-    
-    self.navigationController.navigationBar.barTintColor = color;
-    
-    UINavigationItem *navigation = self.navigationItem;
-    
-    CGRect frame = CGRectMake(0, 0, 100, 50);
-    UILabel *ventureLabel = [[UILabel alloc] initWithFrame:frame];
-    //ventureLabel.backgroundColor = [UIColor greenColor];
-    
-    UIFont *font = [UIFont fontWithName:@"optima-bold" size:25];
-    NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
-    
-    paragraph.alignment = NSTextAlignmentCenter;
-    
-    NSDictionary *attributes = @{NSFontAttributeName: font, NSForegroundColorAttributeName : [UIColor whiteColor], NSParagraphStyleAttributeName : paragraph};
-    
-    NSAttributedString *ventureText = [[NSAttributedString alloc] initWithString:@"VENTURE" attributes:attributes];
-    
-    ventureLabel.attributedText = ventureText;
-    
-    navigation.titleView = ventureLabel;
-}
 
 
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -94,12 +65,7 @@
     }
     return 1;
 }
-- (IBAction)testPress:(UIBarButtonItem *)sender {
-    
-    [self.tableView reloadData];
-    
-    
-}
+
 
 
 -(void)sendCompanyTypeToModel:(UITapGestureRecognizer *)gesture
@@ -258,11 +224,13 @@
         }
         else {
             //infoView.backgroundColor = [UIColor whiteColor] ;
+            
+            
             CGRect frame = infoView.bounds;
             
             
             
-            TilePaletteView *paletteView = [[TilePaletteView alloc] initWithFrame:frame chains:[Game createInitialChainArray:chainsPossible] total:chainsPossible scaling:.9 activated:NO target:self multiRow:NO resizing:NO];
+            TilePaletteView *paletteView = [[TilePaletteView alloc] initWithFrame:frame chains:[Game createInitialChainArray:chainsPossible] total:chainsPossible scaling:.9 activated:NO target:nil multiRow:NO resizing:NO];
             
             
             
@@ -328,35 +296,13 @@
         
 
     }
-    else {
-        CGRect frame = cell.contentView.bounds;
-        
-        NSLog(@"%f %f %f %f", frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
-        
-        frame.origin.x += 20;
-        
-        frame.size.width -= 40;
-        
-        if (self.game.market.isOpen) {
-            NSArray *chainsOnBoard = [self.game.board companyTypesOnBoard];
-            
-            TilePaletteView *palette = [[TilePaletteView alloc] initWithFrame:frame chains:chainsOnBoard  total:chainsPossible scaling:.9 activated:YES target:self multiRow:YES resizing:YES];
-            
-            [cell.contentView addSubview:palette];
-            
-            
-        }
-        
-        
-        
-        
-        
-    }
+    
     
     
     
     return cell;
 }
+
 
 - (CGFloat)tableView:(UITableView *)tableView
 heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -375,42 +321,9 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
     
     
 }
--(void)addShare:(UIButton *)sender
-{
-    
-    int companyType = [[[sender attributedTitleForState:UIControlStateNormal] string] intValue];
-    
-    
-    [self.game addShare:(companyType)];
-    
-    
-    
-    
-    NSArray *sharesLeft = self.game.market.sharesLeft;
-    int bankShareNumber = [sharesLeft[companyType] intValue];
-    
-    if (bankShareNumber == 0) {
-        [sender removeFromSuperview];
-    }
-    
-    
-    if (self.game.market.purchaseCount == 3) {
-        UIView *superview = sender.superview;
-        
-        for (UIView *subview in superview.subviews) {
-            
-            if ([subview isKindOfClass:[UIButton class]]) {
-                UIButton *button = (UIButton *)subview;
-                button.enabled = NO;
-            }
-        }
-    }
-    
-    
-    [self.tableView reloadData];
-    
-    
-}
+
+
+
 
 
 

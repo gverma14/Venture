@@ -12,6 +12,12 @@
 #import "Game.h"
 
 
+@protocol tableDelegate
+
+@property (strong, nonatomic) Game *thisGame;
+
+@end
+
 @interface MarketTableViewController : UITableViewController
 
 @property (nonatomic, strong) Game *game;

@@ -16,7 +16,7 @@
 #import "Player.h"
 #import "MainMenuButton.h"
 #import "PortfolioView.h"
-#import "MarketTableViewController.h"
+#import "MarketViewController.h"
 #import "TilePaletteView.h"
 
 
@@ -726,8 +726,8 @@ const double mergerHighlightFactor = 1.2;
         
         UINavigationController *navigation = (UINavigationController *)segue.destinationViewController;
         
-        if ([navigation.topViewController isKindOfClass:[MarketTableViewController class]]) {
-            MarketTableViewController *marketViewController = (MarketTableViewController *) navigation.topViewController;
+        if ([navigation.topViewController isKindOfClass:[MarketViewController class]]) {
+            MarketViewController *marketViewController = (MarketViewController *) navigation.topViewController;
                         
             if (!marketViewController.game) {
                 marketViewController.game = self.game;

@@ -36,6 +36,7 @@
 		FC99CBD61A0DAA5D00F38284 /* GameBoardTile.m in Sources */ = {isa = PBXBuildFile; fileRef = FC99CBD51A0DAA5D00F38284 /* GameBoardTile.m */; };
 		FC99CBD91A0DACC200F38284 /* GameBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = FC99CBD81A0DACC200F38284 /* GameBoard.m */; };
 		FC99CBDF1A0DB2A500F38284 /* GameBoardTileView.m in Sources */ = {isa = PBXBuildFile; fileRef = FC99CBDE1A0DB2A500F38284 /* GameBoardTileView.m */; };
+		FCD3A5061A43DDE500281E4E /* MarketViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD3A5051A43DDE500281E4E /* MarketViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,6 +99,8 @@
 		FC99CBD81A0DACC200F38284 /* GameBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBoard.m; sourceTree = "<group>"; };
 		FC99CBDD1A0DB2A500F38284 /* GameBoardTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameBoardTileView.h; path = ../GameBoardTileView.h; sourceTree = "<group>"; };
 		FC99CBDE1A0DB2A500F38284 /* GameBoardTileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GameBoardTileView.m; path = ../GameBoardTileView.m; sourceTree = "<group>"; };
+		FCD3A5041A43DDE500281E4E /* MarketViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarketViewController.h; sourceTree = "<group>"; };
+		FCD3A5051A43DDE500281E4E /* MarketViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarketViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,6 +162,8 @@
 			children = (
 				FC08D7EB19F024AD0085D4A9 /* Main.storyboard */,
 				FC2713B61A33D6260024CEC7 /* MarketTableViewController.h */,
+				FCD3A5041A43DDE500281E4E /* MarketViewController.h */,
+				FCD3A5051A43DDE500281E4E /* MarketViewController.m */,
 				FC2713B71A33D6260024CEC7 /* MarketTableViewController.m */,
 				FC2713BA1A36822E0024CEC7 /* TilePaletteView.m */,
 				FC2A19A219F9B42C009A52C0 /* GameViewController.m */,
@@ -343,6 +348,7 @@
 			files = (
 				FC2C16101A02FEC800618EE7 /* Game.m in Sources */,
 				FC99CBDF1A0DB2A500F38284 /* GameBoardTileView.m in Sources */,
+				FCD3A5061A43DDE500281E4E /* MarketViewController.m in Sources */,
 				FC2C16171A03FCF200618EE7 /* PlacementTileBox.m in Sources */,
 				FC2217A51A2102F900356A70 /* PortfolioView.m in Sources */,
 				FC2A19A919F9B8D7009A52C0 /* TileView.m in Sources */,
