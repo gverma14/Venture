@@ -204,23 +204,24 @@ static const double paletteTileScaling = .9;
         UITableView *table = self.table.tableView;
         NSMutableArray *indices = [[NSMutableArray alloc] init];
         
-        for (int section = 0; section < [table numberOfSections]; section++){
-            for (int row = 0; row < [table numberOfRowsInSection:section]; row++){
-                if (!(row == 0 && section == 0)) {
-                    
-                    NSIndexPath *index = [NSIndexPath indexPathForRow:row inSection:section];
-                    [indices addObject:index];
+        int section = 0;
+        for (int row = 1; row < [table numberOfRowsInSection:section]; row++){
+            
+                
+                NSIndexPath *index = [NSIndexPath indexPathForRow:row inSection:section];
+                [indices addObject:index];
 
-                    
-                }
                 
-                
-                
-                
-            }
+            
+            
+            
+            
+            
         }
         
-        [table reloadRowsAtIndexPaths:indices withRowAnimation:UITableViewRowAnimationNone];
+    
+    
+        [table reloadRowsAtIndexPaths:indices withRowAnimation:UITableViewRowAnimationFade];
         
         
         

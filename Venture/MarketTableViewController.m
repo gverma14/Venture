@@ -162,7 +162,7 @@
             
             
             NSArray *sharesOwned;
-
+            BOOL currentPlayer = NO;
             
             if ([labelView.subviews count] == 1) {
                 UILabel *label = labelView.subviews[0];
@@ -180,6 +180,9 @@
                 Player *thisPlayer = self.game.players[indexPath.row-1];
                 NSString *priceString = [NSString stringWithFormat:@"$%d", thisPlayer.cash];
                 
+                if ([thisPlayer isEqual:self.game.currentPlayer]) {
+                    currentPlayer = YES;
+                }
                 sharesOwned = thisPlayer.sharesOwned;
                 
                 nameLabel.text = nameString;
@@ -206,6 +209,12 @@
                 NSNumber *shares =  sharesOwned[i];
                 
                 NSString *shareString = [NSString stringWithFormat:@"%d", [shares intValue]];
+                
+                if(currentPlayer && [shares intValue]) {
+                    label.highlighted = YES;
+                    
+                    label.highlightedTextColor = [UIColor greenColor];
+                }
                 
                 label.text = shareString;
                 
