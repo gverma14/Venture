@@ -20,7 +20,7 @@
 #import "TilePaletteView.h"
 
 
-@interface GameViewController () <TilePaletteViewDelegate>
+@interface GameViewController () <TilePaletteViewDelegate, MarketViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIView *gameView;
 @property (strong, nonatomic) Game *game;
 @property (weak, nonatomic) IBOutlet UIView *controlPanelView;
@@ -138,12 +138,19 @@ const double mergerHighlightFactor = 1.2;
 #pragma mark - STATUS UPDATES
 ////////////////
 
-
+-(void)returnToBoard
+{
+    [self updatePortfolioView];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 // Update the portfolio view onscreen
 -(void)updatePortfolioView
 {
     self.portfolio.cash = self.game.currentPlayer.cash;
+    self.portfolio.stock = [self.game determineStockValue:self.game.currentPlayer];
+    self.portfolio.majority = [self.game determineMajority:self.game.currentPlayer];
+    
 }
 
 // update the current player label according to the model
@@ -548,7 +555,7 @@ const double mergerHighlightFactor = 1.2;
     [UIView transitionWithView:self.view duration:.25 options:UIViewAnimationOptionTransitionFlipFromRight animations:^{
         
         [self updatePlayerLabel];
-        
+        [self updatePortfolioView];
         
         
     }completion:^(BOOL finished) {
@@ -731,6 +738,7 @@ const double mergerHighlightFactor = 1.2;
                         
             if (!marketViewController.game) {
                 marketViewController.game = self.game;
+                marketViewController.delegate = self;
             }
             
             
@@ -772,9 +780,9 @@ const double mergerHighlightFactor = 1.2;
         
         _portfolio = [[PortfolioView alloc] initWithFrame:frame];
         
-        _portfolio.cash = 0;
-        _portfolio.stock = 0;
-        _portfolio.majority = NO;
+        _portfolio.cash = self.game.currentPlayer.cash;
+        _portfolio.stock = [self.game determineStockValue:self.game.currentPlayer];
+        _portfolio.majority = [self.game determineMajority:self.game.currentPlayer];
         
         [self.controlPanelView addSubview:_portfolio];
         

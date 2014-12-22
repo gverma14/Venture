@@ -138,7 +138,7 @@ static const double paletteTileScaling = .9;
 
 - (IBAction)doneButtonPressed:(UIBarButtonItem *)sender {
     
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.delegate returnToBoard];
     
 }
 
@@ -154,51 +154,72 @@ static const double paletteTileScaling = .9;
         int companyType = tile.companyType;
         [self.game addShare:companyType];
         
-        NSArray *sharesLeft = self.game.market.sharesLeft;
-        int bankShareNumber = [sharesLeft[companyType] intValue];
-        
-        if(bankShareNumber == 0) {
-            TilePaletteView *oldPalette = self.palette;
+        if (self.game.market.purchaseCount == 3) {
             
             [UIView animateWithDuration:.25 animations:^{
-                oldPalette.alpha = 0;
-                oldPalette.center = self.offScreenCenter;
-                
-                
+                self.palette.center = self.offScreenCenter;
+                self.palette.alpha = 0;
                 
             }completion:^(BOOL finished) {
-                if (finished) {
-                    
-                    [oldPalette removeFromSuperview];
-                    
-                    NSMutableArray *chains = [[self.game.board companyTypesOnBoard] mutableCopy];
-                    NSNumber *companyNumber = [NSNumber numberWithInt:companyType];
-                    
-                    [chains removeObject:companyNumber];
-                    
-                    TilePaletteView *newPalette = [[TilePaletteView alloc] initWithFrame:self.paletteFrame chains:chains total:chainsPossible scaling:paletteTileScaling activated:YES target:self multiRow:YES resizing:NO];
-                    newPalette.center = self.offScreenCenter;
-                    newPalette.alpha = 0;
-                    
-                    [self.view addSubview: newPalette];
-                    
-                    [UIView animateWithDuration:.25 animations:^{
-                        newPalette.alpha = 1;
-                        newPalette.center = self.paletteCenter;
-                    }completion:^(BOOL finished) {
-                        if (finished) {
-                            NSLog(@"finished");
-                        }
-                    }];
-                    
-                    
-                }
+                [self.palette removeFromSuperview];
+                self.palette = nil;
             }];
             
             
             
-    
+            
         }
+        else {
+            NSArray *sharesLeft = self.game.market.sharesLeft;
+            int bankShareNumber = [sharesLeft[companyType] intValue];
+            
+            if(bankShareNumber == 0) {
+                TilePaletteView *oldPalette = self.palette;
+                
+                [UIView animateWithDuration:.25 animations:^{
+                    oldPalette.alpha = 0;
+                    oldPalette.center = self.offScreenCenter;
+                    
+                    
+                    
+                }completion:^(BOOL finished) {
+                    if (finished) {
+                        
+                        [oldPalette removeFromSuperview];
+                        
+                        NSMutableArray *chains = [[self.game.board companyTypesOnBoard] mutableCopy];
+                        NSNumber *companyNumber = [NSNumber numberWithInt:companyType];
+                        
+                        [chains removeObject:companyNumber];
+                        
+                        TilePaletteView *newPalette = [[TilePaletteView alloc] initWithFrame:self.paletteFrame chains:chains total:chainsPossible scaling:paletteTileScaling activated:YES target:self multiRow:YES resizing:NO];
+                        newPalette.center = self.offScreenCenter;
+                        newPalette.alpha = 0;
+                        
+                        [self.view addSubview: newPalette];
+                        
+                        [UIView animateWithDuration:.25 animations:^{
+                            newPalette.alpha = 1;
+                            newPalette.center = self.paletteCenter;
+                        }completion:^(BOOL finished) {
+                            if (finished) {
+                                NSLog(@"finished");
+                            }
+                        }];
+                        
+                        
+                    }
+                }];
+                
+                
+                
+                
+            }
+            
+        }
+        
+        
+        
         
         
         UITableView *table = self.table.tableView;

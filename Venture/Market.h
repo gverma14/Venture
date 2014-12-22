@@ -11,6 +11,7 @@
 @interface Market : NSObject
 
 -(NSArray *)sharePrices:(NSArray *)sharesPlayed;
+
 @property (nonatomic, strong) NSMutableArray *sharesLeft;
 @property (nonatomic) int numberOfCompanies;
 @property (nonatomic) int purchaseCount;

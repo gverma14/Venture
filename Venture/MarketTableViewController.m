@@ -188,6 +188,12 @@
                 nameLabel.text = nameString;
                 priceLabel.text = priceString;
                 
+                if (currentPlayer) {
+                    nameLabel.highlighted = YES;
+                    nameLabel.highlightedTextColor = [UIColor greenColor];
+                    nameLabel.font = [UIFont boldSystemFontOfSize:nameLabel.font.pointSize*1.5];
+                    
+                }
                 
                 
             }
@@ -210,11 +216,7 @@
                 
                 NSString *shareString = [NSString stringWithFormat:@"%d", [shares intValue]];
                 
-                if(currentPlayer && [shares intValue]) {
-                    label.highlighted = YES;
-                    
-                    label.highlightedTextColor = [UIColor greenColor];
-                }
+                
                 
                 label.text = shareString;
                 

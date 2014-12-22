@@ -57,6 +57,11 @@
 
 +(NSMutableArray *)createInitialChainArray:(int)numberOfCompanies;
 
+
+-(int)determineStockValue:(Player *)player;
+-(BOOL)determineMajority:(Player *)player;
+
+
 @end
 
 static const int chainsPossible = 7;

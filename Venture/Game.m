@@ -308,7 +308,7 @@
 {
     NSArray *chain = [self.board chainNumbersOnBoard:chainsPossible];
     
-    NSArray *sharePrices = [self.market sharePrices:chain];
+    NSArray *sharePrices = [self.market sharePrices:chain];  //Converts share numbers into share prices
     return sharePrices;
     
 
@@ -371,30 +371,99 @@
 
 -(void)addShare:(int)companyType
 {
-    int bankShareNumber = [self.market.sharesLeft[companyType] intValue];
     
+    NSArray *sharePrices = [self determinePrices];
     
-    if (bankShareNumber > 0) {
-        bankShareNumber--;
+    int companyPrice = [sharePrices[companyType] intValue];
+    
+    if (self.currentPlayer.cash >= companyPrice) {
+        
+        self.currentPlayer.cash -= companyPrice;
+    
+        int bankShareNumber = [self.market.sharesLeft[companyType] intValue];
         
         
-        int playerShareNumber = [self.currentPlayer.sharesOwned[companyType] intValue];
-        playerShareNumber++;
         
+        if (bankShareNumber > 0) {
+            bankShareNumber--;
+            
+            
+            int playerShareNumber = [self.currentPlayer.sharesOwned[companyType] intValue];
+            playerShareNumber++;
+            
+            
+            
+            self.market.purchaseCount++;
+            
+            self.market.sharesLeft[companyType] = [NSNumber numberWithInt:bankShareNumber];
+            self.currentPlayer.sharesOwned[companyType] = [NSNumber numberWithInt:playerShareNumber];
+            
+            
+            
+            
+        }
+    }
+}
+
+-(int)determineStockValue:(Player *)player
+{
+    NSArray *stockPrices = [self determinePrices];
+    
+    NSArray *sharesOwned = player.sharesOwned;
+    
+    int total = 0;
+    for (int i = 1; i <= chainsPossible; i++) {
         
-        
-        self.market.purchaseCount++;
-        
-        self.market.sharesLeft[companyType] = [NSNumber numberWithInt:bankShareNumber];
-        self.currentPlayer.sharesOwned[companyType] = [NSNumber numberWithInt:playerShareNumber];
-        
+        total += ([stockPrices[i] intValue] * [sharesOwned[i] intValue]);
         
         
         
     }
     
+    return total;
 }
 
+
+-(BOOL)determineMajority:(Player *)player
+{
+    NSArray *sharesOwned = player.sharesOwned;
+    
+    BOOL majority = NO;
+    for (NSNumber *shareNumber in sharesOwned) {
+        
+        if ([shareNumber intValue] > 0) {
+            majority = YES;
+            break;
+        }
+    }
+    
+    
+    
+    if (majority) {
+        
+        for (Player *otherPlayer in self.players) {
+            
+            NSArray *otherSharesOwned = otherPlayer.sharesOwned;
+            
+            for (int i = 1; i <= chainsPossible; i++) {
+                
+                if ([otherSharesOwned[i] intValue] > [sharesOwned[i] intValue]) {
+                    majority = NO;
+                }
+                
+                
+            }
+            
+            
+            
+            
+            
+        }
+    }
+    
+    return majority;
+    
+}
 
 
 
