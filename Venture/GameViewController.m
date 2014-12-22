@@ -676,7 +676,7 @@ const double mergerHighlightFactor = 1.2;
                 
                 
                 
-                [self updateMarks];
+                //[self updateMarks];
                 
                 [gameTileView removeGestureRecognizer:[gameTileView.gestureRecognizers objectAtIndex:0]];
                 
