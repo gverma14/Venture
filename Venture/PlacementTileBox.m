@@ -43,7 +43,7 @@
 
 -(int)tilesLeft
 {
-    return [self.placementTiles count];
+    return (int)[self.placementTiles count];
 }
 
 -(int)maxPlacementTiles
@@ -56,7 +56,7 @@
 {
 
     if ([self.placementTiles count] > 0) {
-        int index = [self generateRandomNumber:0 end:([self.placementTiles count]-1)];
+        int index = [self generateRandomNumber:0 end:((int)[self.placementTiles count]-1)];
         PlacementTile *tile = [self.placementTiles objectAtIndex:index];
         [self.placementTiles removeObjectAtIndex:index];
         

@@ -27,9 +27,9 @@
     
     //self.backgroundColor = [UIColor grayColor];
     
-    int totalButtonCount = [chainsInPlay count];
+    int totalButtonCount = (int)[chainsInPlay count];
     
-    NSLog(@"%d button count", totalButtonCount);
+    
     
     CGRect tileFrame = self.bounds;
     

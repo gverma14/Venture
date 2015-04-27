@@ -36,13 +36,7 @@
     
     NSLog(@"Market Open:%d", self.game.market.isOpen);
     
-    if (self.game) {
-        NSLog(@"exists");
-    }
-    NSLog(@"%@ self", self);
-    NSLog(@"%@ parent controller", self.parentViewController);
-    
-    //self.tableView.backgroundColor = [UIColor grayColor];
+
 }
 
 
@@ -68,11 +62,6 @@
 
 
 
--(void)sendCompanyTypeToModel:(UITapGestureRecognizer *)gesture
-{
-    NSLog(@"tapped");
-    
-}
 
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -175,7 +164,7 @@
                 UILabel *nameLabel = labelView.subviews[0];
                 UILabel *priceLabel = labelView.subviews[1];
                 
-                NSString *nameString = [NSString stringWithFormat:@"%d", indexPath.row];;
+                NSString *nameString = [NSString stringWithFormat:@"%d", (int)indexPath.row];;
                 
                 Player *thisPlayer = self.game.players[indexPath.row-1];
                 NSString *priceString = [NSString stringWithFormat:@"$%d", thisPlayer.cash];

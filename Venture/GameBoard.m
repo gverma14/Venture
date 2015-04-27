@@ -120,7 +120,7 @@
     
     
     NSDictionary *neighborLengths = [self findLengthOfNeighbors:tile];
-    [self debugNeighborLengths:neighborLengths];
+    //[self debugNeighborLengths:neighborLengths];
     
     //// Sorts the dictionary of lengths of neighboring chains and finds the highest chain key
     NSString *highestChainKey = [self findHighestChainKey:neighborLengths];
@@ -177,6 +177,80 @@
     /// Else sets company type to neutral if all surrounding tiles are empty
     
     return highestNeighboringTiles;
+    
+}
+
+-(NSArray *)findNeighboringTilesOf:(GameBoardTile *)tile greaterThan:(int)chainLength
+{
+    NSDictionary *neighborLengths = [self findLengthOfNeighbors:tile];
+    NSMutableArray *greaterTiles = [[NSMutableArray alloc] init];
+    NSSet *neighborKeys = [neighborLengths keysOfEntriesPassingTest:^BOOL(id key, id obj, BOOL *stop) {
+        
+        
+        if ([obj intValue] >= chainLength) {
+            return YES;
+        }
+        else {
+            return NO;
+        }
+        
+    }];
+    
+    int row = tile.row;
+    int column = tile.column;
+    
+    for (id key in neighborKeys) {
+        
+        GameBoardTile *neighboringTile;
+        if ([key isEqualToString:@"top"]) {
+            neighboringTile = [self retrieveTileAtRow:row-1 column:column];
+        }
+        else if ([key isEqualToString:@"bottom"]){
+            neighboringTile = [self retrieveTileAtRow:row+1 column:column];
+        }
+        else if ([key isEqualToString:@"left"]){
+            neighboringTile = [self retrieveTileAtRow:row column:column-1];
+        }
+        else if ([key isEqualToString:@"right"]) {
+            neighboringTile = [self retrieveTileAtRow:row column:column+1];
+        }
+        
+        
+        if (neighboringTile.companyType != tile.companyType) {
+            
+            NSIndexSet *indices = [greaterTiles indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+                
+                GameBoardTile *otherTile = (GameBoardTile *)obj;
+                
+                if (otherTile.companyType == neighboringTile.companyType) {
+                    *stop = YES;
+                    return YES;
+                }
+                else {
+                    return NO;
+                }
+                
+                
+            }];
+            
+            if (![indices count]) {
+                [greaterTiles addObject:neighboringTile];
+            }
+            
+            
+            
+            
+        }
+        
+        
+    }
+    
+    return greaterTiles;
+    
+    
+    
+    
+    
     
 }
 

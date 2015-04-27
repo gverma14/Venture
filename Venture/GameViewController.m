@@ -18,7 +18,7 @@
 #import "PortfolioView.h"
 #import "MarketViewController.h"
 #import "TilePaletteView.h"
-
+#import "PlacementTile.h"
 
 @interface GameViewController () <TilePaletteViewDelegate, MarketViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIView *gameView;
@@ -51,7 +51,16 @@ const double mergerHighlightFactor = 1.2;
 
 -(void)viewDidLoad
 {
+    
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self selector:@selector(method:) name:@"notification" object:nil];
+    
     [self setup];
+}
+
+-(void)method:(NSNotification *)notification
+{
+    NSLog(@"%@ %@", notification.name, notification.object );
 }
 
 // Initialize nav bar, layour game tiles, update player label, update portfolio view
@@ -66,6 +75,7 @@ const double mergerHighlightFactor = 1.2;
 // Set up markers and placed tiles after view appears
 -(void)viewDidAppear:(BOOL)animated
 {
+    
     
     [self updateMarks];
     [self updatePlaced];
@@ -157,7 +167,7 @@ const double mergerHighlightFactor = 1.2;
 -(void)updatePlayerLabel
 {
     if (self.game.currentPlayer) {
-        self.playerLabel.text = [NSString stringWithFormat:@"Player %d", [self.game.players indexOfObject:self.game.currentPlayer]+1];
+        self.playerLabel.text = [NSString stringWithFormat:@"Player %d", (int)[self.game.players indexOfObject:self.game.currentPlayer]+1];
     }
     else {
         self.playerLabel.text = @"Player";
@@ -224,10 +234,6 @@ const double mergerHighlightFactor = 1.2;
             if (index < [views count]) {
                 GameBoardTileView *view = [views objectAtIndex:index];
                 
-                if (tile.companyType > 0) {
-                    //NSLog(@"row:%d col:%d", row, col);
-                    
-                }
                 if (view.companyType != tile.companyType) {
                     view.companyType = tile.companyType;
                 }
@@ -323,7 +329,7 @@ const double mergerHighlightFactor = 1.2;
                 }];
                 
                 [self toggleNextPlayer];
-                
+                [self updatePortfolioView];
                  
             }
             
@@ -422,11 +428,12 @@ const double mergerHighlightFactor = 1.2;
     [self updatePlaced];
     
     
-    
+    [self updatePortfolioView];
     [self toggleNextPlayer];
     
     
 }
+
 
 
 
@@ -501,6 +508,7 @@ const double mergerHighlightFactor = 1.2;
     [self toggleTaps:NO];
     
     
+    [self checkMarkers];
     
     
     
@@ -542,8 +550,7 @@ const double mergerHighlightFactor = 1.2;
     }];
     
     [self toggleTaps:YES];
-    
-    
+        
     
     
 }
@@ -560,10 +567,45 @@ const double mergerHighlightFactor = 1.2;
         
     }completion:^(BOOL finished) {
         if (finished) {
+            
+            
+            
+            
+            //NSArray *placementTilesRemoved = [self.game checkMarkers];
             [self updateMarks];
+            
+            
+            
+            
             
         }
     }];
+}
+
+
+
+-(void)checkMarkers
+{
+    NSArray *placementTilesRemoved = [self.game checkMarkers];
+    
+    for(PlacementTile *tile in placementTilesRemoved) {
+        int row = tile.row;
+        int column = tile.col;
+        
+        
+        [self toggleGameTileAt:row col:column];
+        
+        GameBoardTileView *view = [self retrieveGameBoardTileViewAtRow:row col:column];
+        [view removeGestureRecognizer:view.gestureRecognizers[0]];
+        
+        
+        
+    }
+    
+//    if ([placementTilesRemoved count]) {
+//        [self updateMarks];
+//    }
+    
 }
 
 
@@ -697,7 +739,7 @@ const double mergerHighlightFactor = 1.2;
 // Retrieves the specific game tile view among the gameview's subviews using row and column notation
 -(GameBoardTileView *)retrieveGameBoardTileViewAtRow:(int)rowIndex col:(int)colIndex
 {
-    int gridIndex = rowIndex*self.gameGrid.columnCount+colIndex;
+    int gridIndex = rowIndex*(int)self.gameGrid.columnCount+colIndex;
     
     GameBoardTileView *view = [[self. gameView subviews] objectAtIndex:gridIndex];
     return view;
@@ -809,7 +851,7 @@ const double mergerHighlightFactor = 1.2;
         _playerLabel.center = CGPointMake(self.controlPanelView.frame.size.width/2, 3.0/4*self.controlPanelView.frame.size.height);
         
         if (self.game.currentPlayer) {
-            _playerLabel.text = [NSString stringWithFormat:@"Player %d", [self.game.players indexOfObject:self.game.currentPlayer]+1];
+            _playerLabel.text = [NSString stringWithFormat:@"Player %d", (int)[self.game.players indexOfObject:self.game.currentPlayer]+1];
         }
         else {
             _playerLabel.text = @"Player";

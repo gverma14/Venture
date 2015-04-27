@@ -62,10 +62,13 @@
 -(BOOL)determineMajority:(Player *)player;
 
 
+-(NSArray *)checkMarkers;
+
+
 @end
 
 static const int chainsPossible = 7;
-
+static const int chainLimit = 11;
 
 
 

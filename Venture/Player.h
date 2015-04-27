@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "PlacementTile.h"
 #import "PlacementTileBox.h"
-
+#import "GameBoard.h"
 @interface Player : NSObject
 
 @property (nonatomic) int cash;
@@ -20,6 +20,8 @@
 
 -(instancetype)initWithCompanies:(int)numCompanies tileBox:(PlacementTileBox *)tileBox;
 
--(void)replacePlacementTile:(PlacementTile *)oldPlacementTile fromTileBox:(PlacementTileBox *)tileBox;
+-(void)replacePlacementTile:(PlacementTile *)oldPlacementTile fromTileBox:(PlacementTileBox *)tileBox usingBoard:(GameBoard *)board withChainLimit:(int)limit;
+
+
 
 @end

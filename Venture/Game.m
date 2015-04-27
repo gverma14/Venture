@@ -104,6 +104,10 @@
 
 -(NSArray *)chooseTileAtRow:(int)row column:(int)col
 {
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    NSNotification *notification = [NSNotification notificationWithName:@"notification" object:self];
+    [center postNotification:notification];
+    
     
     Player *player = self.currentPlayer;
     
@@ -145,7 +149,8 @@
         
         
         /// replaces players placement tile
-        [player replacePlacementTile:oldPlacementTile fromTileBox:self.tileBox];
+        [player replacePlacementTile:oldPlacementTile fromTileBox:self.tileBox usingBoard:self.board withChainLimit:chainLimit];
+        
         
         
         
@@ -350,7 +355,7 @@
 -(void)completePlayerTurn
 {
     self.market.open = NO;
-    int playerIndex = [self.players indexOfObject:self.currentPlayer];
+    int playerIndex =(int) [self.players indexOfObject:self.currentPlayer];
     
     if (playerIndex == [self.players count] -1) {
         self.currentPlayer = self.players[0];
@@ -365,7 +370,7 @@
 
 -(void)endOfTurn
 {
-    self.market.open = abs([self.chainsInPlay count] - chainsPossible);
+    self.market.open = abs((int)[self.chainsInPlay count] - chainsPossible);
 }
 
 
@@ -462,6 +467,38 @@
     }
     
     return majority;
+    
+}
+
+-(NSArray *)checkMarkers
+{
+    NSArray *stack = self.currentPlayer.placementTileStack;
+    NSMutableArray *placementTilesRemoved = [[NSMutableArray alloc] init];
+    
+    for (PlacementTile *placementTile in stack) {
+        GameBoardTile *gameTile = [[GameBoardTile alloc] init];
+        gameTile.row = placementTile.row;
+        gameTile.column = placementTile.col;
+        
+        int limitCount = (int)[[self.board findNeighboringTilesOf:gameTile greaterThan:chainLimit] count];
+        
+
+        if (limitCount > 1) {
+            
+            [placementTilesRemoved addObject:placementTile];
+            //[self.currentPlayer replacePlacementTile:placementTile fromTileBox:self.tileBox usingBoard:self.board withChainLimit:chainLimit];
+        }
+        
+        
+    }
+    
+    for (PlacementTile *placementTileToBeRemoved in placementTilesRemoved) {
+        [self.currentPlayer replacePlacementTile:placementTileToBeRemoved fromTileBox:self.tileBox usingBoard:self.board withChainLimit:chainLimit];
+    }
+    
+    
+    return placementTilesRemoved;
+    
     
 }
 
