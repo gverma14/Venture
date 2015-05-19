@@ -470,6 +470,9 @@
     
 }
 
+
+
+
 -(NSArray *)checkMarkers
 {
     NSArray *stack = self.currentPlayer.placementTileStack;

@@ -10,7 +10,6 @@
 #import "MainMenuButton.h"
 
 @interface VentureMainViewController ()
-@property (weak, nonatomic) IBOutlet UIButton *playButton;
 
 @end
 

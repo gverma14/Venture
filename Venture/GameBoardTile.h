@@ -11,7 +11,6 @@
 @interface GameBoardTile : NSObject
 
 @property (nonatomic) int companyType;   //-1 for blank square 0 for occupied square, 1, 2, 3, etc. for others
-@property (nonatomic, strong) NSMutableArray *neighboringTiles;
 @property (nonatomic) int row;
 @property (nonatomic) int column;
 
