@@ -14,7 +14,11 @@
 
 @property (strong, nonatomic) NSMutableArray *placementTiles;
 
+
+
 @end
+
+const int maxTiles = 108;
 
 @implementation PlacementTileBox
 
@@ -46,9 +50,9 @@
     return (int)[self.placementTiles count];
 }
 
--(int)maxPlacementTiles
++(int)maxPlacementTiles
 {
-    return 108;
+    return maxTiles;
 }
 
 
@@ -63,6 +67,9 @@
         return tile;
         
     }
+    
+    
+    
     
     return nil;
 

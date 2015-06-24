@@ -14,7 +14,7 @@
 
 @property (nonatomic) int cash;
 @property (nonatomic, strong) NSMutableArray *sharesOwned;
-@property (nonatomic) int numberOfCompanies;
+
 @property (strong, nonatomic) NSMutableArray *placementTileStack;
 
 

@@ -51,16 +51,9 @@ const double mergerHighlightFactor = 1.2;
 
 -(void)viewDidLoad
 {
-    
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center addObserver:self selector:@selector(method:) name:@"notification" object:nil];
-    
     [self setup];
-}
-
--(void)method:(NSNotification *)notification
-{
-    NSLog(@"%@ %@", notification.name, notification.object );
+    
+    
 }
 
 // Initialize nav bar, layour game tiles, update player label, update portfolio view
@@ -116,7 +109,7 @@ const double mergerHighlightFactor = 1.2;
     
     for (int row = 0; row < [grid rowCount]; row++) {
         for (int col = 0; col < [grid columnCount]; col++) {
-            if (row*[grid columnCount]+col < self.game.tileBox.maxPlacementTiles) {
+            if (row*[grid columnCount]+col < PlacementTileBox.maxPlacementTiles) {
                 //NSLog(@"%d tile no", row*[grid columnCount]+col);
                 
                 CGRect frame = [grid frameOfCellAtRow:0 inColumn:0];
@@ -358,7 +351,8 @@ const double mergerHighlightFactor = 1.2;
         NSMutableArray *previous = [[NSMutableArray alloc] init];
         
         // Use to retrieve the tile objects in the chain
-        [self.game.board findLengthOfChainAtRow:tile.row column:tile.column withPreviousTiles:previous];
+        //[self.game.board findLengthOfChainAtRow:tile.row column:tile.column withPreviousTiles:previous];
+        [self.game.board traverseChainAtRow:tile.row column:tile.column withPreviousTiles:previous];
         
         
         
@@ -802,7 +796,7 @@ const double mergerHighlightFactor = 1.2;
         _gameGrid = [[Grid alloc] init];
         _gameGrid.size = self.gameView.frame.size;
         _gameGrid.cellAspectRatio = 1;
-        _gameGrid.minimumNumberOfCells = self.game.tileBox.maxPlacementTiles;
+        _gameGrid.minimumNumberOfCells = PlacementTileBox.maxPlacementTiles;
         
     }
     

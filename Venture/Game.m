@@ -16,7 +16,7 @@
 
 @end
 
-
+const int chainsPossible = 7;
 
 
 
@@ -30,6 +30,7 @@
         Player *player = [[Player alloc] initWithCompanies:chainsPossible tileBox:self.tileBox];
         [self.players addObject:player];
     }
+    
     
     return self;
     
@@ -69,6 +70,11 @@
         _board = [[GameBoard alloc] init];
     }
     
+    //int chainsPossible = 0;
+    
+    
+    
+    
     return _board;
 }
 
@@ -77,19 +83,19 @@
 
 -(int)numberColumns
 {
-    return self.board.colCount;
+    return GameBoard.colCount;
 }
 
 -(int)numberRows
 {
-    return self.board.rowCount;
+    return GameBoard.rowCount;
 }
 
 
 -(PlacementTileBox *)tileBox
 {
     if (!_tileBox) {
-        _tileBox = [[PlacementTileBox alloc] initWithRow:self.board.rowCount column:self.board.colCount];
+        _tileBox = [[PlacementTileBox alloc] initWithRow:GameBoard.rowCount column:GameBoard.colCount];
     }
     
     return _tileBox;

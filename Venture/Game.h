@@ -67,7 +67,7 @@
 
 @end
 
-static const int chainsPossible = 7;
+const int chainsPossible;
 static const int chainLimit = 11;
 
 

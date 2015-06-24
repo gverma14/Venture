@@ -10,63 +10,56 @@
 #import "GameBoardTile.h"
 @implementation Player
 
-static const int placementTileCount = 6;
+const int placementTileCount = 6;
+const int startingCash = 60;
 
+
+// Custom initializer for Player class that adds a starting set of PlacementTiles
 -(instancetype)initWithCompanies:(int)numCompanies tileBox:(PlacementTileBox *)tileBox
 {
     self = [super init];
     
-    self.numberOfCompanies = numCompanies;
     
+    // Draw a random placement tile from the tilebox and then add it to the player's stack
     for (int i = 0 ; i < placementTileCount; i++) {
         PlacementTile *tile = [tileBox drawRandomTile];
         [self.placementTileStack addObject:tile];
         
-        
     }
     
-    self.cash = 60;
+    // set starting cash value
+    _cash = startingCash;
+    
+    // Initialize array for keeping track of shares owned for each company type
+    _sharesOwned = [[NSMutableArray alloc] initWithCapacity:numCompanies+1];
+    for (int i=0; i <= numCompanies; i++) {
+        
+        NSNumber *number = [NSNumber numberWithInt:0];
+        [_sharesOwned addObject:number];
+    }
+    
+    
     
     return self;
     
 }
 
 
-
--(NSMutableArray *)sharesOwned
-{
-    if (!_sharesOwned) {
-        _sharesOwned = [[NSMutableArray alloc] initWithCapacity:self.numberOfCompanies+1];
-        
-        for (int i = 0; i <= self.numberOfCompanies; i++) {
-            NSNumber *number = [NSNumber numberWithInt:0];
-            [_sharesOwned addObject:number];
-            
-        }
-        
-        
-        
-        
-    }
-    
-    return _sharesOwned;
-}
-
-
+// Getter method for the placementTileStack array
 -(NSMutableArray *)placementTileStack
 {
     if (!_placementTileStack) {
         _placementTileStack = [[NSMutableArray alloc] init];
         
-        
-        
-        
     }
-    
-    
     return _placementTileStack;
 }
 
+
+// Method that is called when a PlacementTile is drawn and needs to be replaced from the PlacementTileBox
+// Method takes the parameters for the old PlacementTile object to be removed and the PlacementTileBox to
+// be drawn from.
+// In addition,
 -(void)replacePlacementTile:(PlacementTile *)oldPlacementTile fromTileBox:(PlacementTileBox *)tileBox usingBoard:(GameBoard *)board withChainLimit:(int)limit
 {
     if ([self.placementTileStack containsObject:oldPlacementTile]) {
@@ -95,17 +88,6 @@ static const int placementTileCount = 6;
         } while (limitCount > 1);
         
         
-        
-        
-        
-             
-             
-    
-        
-        
-        
-        
-        
         if (newPlacementTile) {
             [self.placementTileStack insertObject:newPlacementTile atIndex:index];
         }
@@ -115,22 +97,6 @@ static const int placementTileCount = 6;
     
     
 }
-
-//-(int)checkPlacementTile:(PlacementTile *)placementTile usingBoard:(GameBoard *)board withChainLimit:(int)limit
-//{
-//    int limitCount = 0;
-//    GameBoardTile *tile = [board retrieveTileAtRow:placementTile.row column:placementTile.col];
-//    NSDictionary *neighborLengths = [board findLengthOfNeighbors:tile];
-//    for (id key in neighborLengths) {
-//        
-//        if ([neighborLengths[key] intValue] >= limit) {
-//            limitCount++;
-//        }
-//    }
-//    
-//    return limitCount;
-//}
-
 
 
 

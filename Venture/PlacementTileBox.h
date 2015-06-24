@@ -16,7 +16,7 @@
 -(int)tilesLeft;
 - (instancetype)initWithRow:(int)nRows column:(int)nColumns;
 
-@property (nonatomic) int maxPlacementTiles;
++ (int)maxPlacementTiles;
 
 
 @end
