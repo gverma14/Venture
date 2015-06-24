@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -65,14 +66,20 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hKo-8c-dxn">
-                                <rect key="frame" x="48" y="64" width="225" height="300"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zvx-Qh-TFB">
-                                <rect key="frame" x="20" y="364" width="280" height="100"/>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zvx-Qh-TFB"/>
+                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hKo-8c-dxn">
+                                <rect key="frame" x="16" y="64" width="288" height="384"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="hKo-8c-dxn" secondAttribute="height" multiplier="3:4" id="kfB-J6-QaJ"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.64705882349999999" green="0.0" blue="0.12941176469999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="hKo-8c-dxn" firstAttribute="trailing" secondItem="Tt6-ao-Hbj" secondAttribute="trailingMargin" id="M7e-qn-u0H"/>
+                            <constraint firstItem="hKo-8c-dxn" firstAttribute="top" secondItem="Vpl-nt-d9s" secondAttribute="bottom" id="P3z-ci-ECy"/>
+                            <constraint firstItem="hKo-8c-dxn" firstAttribute="leading" secondItem="Tt6-ao-Hbj" secondAttribute="leadingMargin" id="wkT-3S-qN4"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="cr9-mr-mYF">
                         <barButtonItem key="rightBarButtonItem" title="Market" id="c7Q-FY-oLL">
