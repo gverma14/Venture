@@ -51,7 +51,6 @@ const double mergerHighlightFactor = 1.2;
 
 -(void)viewDidLoad
 {
-    [self setup];
     
     
 }
@@ -59,17 +58,31 @@ const double mergerHighlightFactor = 1.2;
 // Initialize nav bar, layour game tiles, update player label, update portfolio view
 -(void)setup
 {
-    [self setupNavigationBar];
     [self layoutTiles];
+    [self setupNavigationBar];
     [self updatePlayerLabel];
     [self updatePortfolioView];
+    
+    
+
+}
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    
+}
+
+-(void)viewDidLayoutSubviews
+{
+    [self setup];
+
 }
 
 // Set up markers and placed tiles after view appears
 -(void)viewDidAppear:(BOOL)animated
 {
-    
-    
+
+
     [self updateMarks];
     [self updatePlaced];
 }
@@ -795,6 +808,10 @@ const double mergerHighlightFactor = 1.2;
     if (!_gameGrid) {
         _gameGrid = [[Grid alloc] init];
         _gameGrid.size = self.gameView.frame.size;
+        NSLog(@"%f %f", self.view.frame.size.height, self.view.frame.size.width);
+
+        NSLog(@"%f %f", self.gameView.frame.size.height, self.gameView.frame.size.width);
+        
         _gameGrid.cellAspectRatio = 1;
         _gameGrid.minimumNumberOfCells = PlacementTileBox.maxPlacementTiles;
         
