@@ -16,11 +16,11 @@
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TTn-Zz-grP">
-                                <rect key="frame" x="16" y="237" width="288" height="56"/>
+                                <rect key="frame" x="16" y="331" width="343" height="56"/>
                                 <attributedString key="attributedText">
                                     <fragment content="VENTURE">
                                         <attributes>
@@ -33,7 +33,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="companytileicon_0" translatesAutoresizingMaskIntoConstraints="NO" id="ZQ7-2e-BUh">
-                                <rect key="frame" x="81" y="81" width="158" height="148"/>
+                                <rect key="frame" x="109" y="175" width="158" height="148"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.6470588235294118" green="0.0" blue="0.12941176470588234" alpha="1" colorSpace="calibratedRGB"/>
@@ -46,6 +46,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="RPL-R7-Yfp"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <segue destination="hVp-Kb-0Kq" kind="modal" identifier="playSegue" modalTransitionStyle="flipHorizontal" id="d77-aT-YLY"/>
                     </connections>
@@ -63,21 +64,29 @@
                         <viewControllerLayoutGuide type="bottom" id="QKf-2o-6Bh"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Tt6-ao-Hbj">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zvx-Qh-TFB"/>
                             <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hKo-8c-dxn">
-                                <rect key="frame" x="16" y="64" width="288" height="384"/>
+                                <rect key="frame" x="16" y="64" width="343" height="457"/>
+                                <color key="backgroundColor" red="1" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="hKo-8c-dxn" secondAttribute="height" multiplier="3:4" id="kfB-J6-QaJ"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zvx-Qh-TFB">
+                                <rect key="frame" x="16" y="521" width="343" height="126"/>
+                                <color key="backgroundColor" red="0.36353786500000002" green="0.86042997259999998" blue="0.8318886861" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.64705882349999999" green="0.0" blue="0.12941176469999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="zvx-Qh-TFB" secondAttribute="trailing" id="3W5-nP-F70"/>
                             <constraint firstItem="hKo-8c-dxn" firstAttribute="trailing" secondItem="Tt6-ao-Hbj" secondAttribute="trailingMargin" id="M7e-qn-u0H"/>
+                            <constraint firstItem="zvx-Qh-TFB" firstAttribute="top" secondItem="hKo-8c-dxn" secondAttribute="bottom" id="Nzm-qe-wJe"/>
                             <constraint firstItem="hKo-8c-dxn" firstAttribute="top" secondItem="Vpl-nt-d9s" secondAttribute="bottom" id="P3z-ci-ECy"/>
+                            <constraint firstItem="QKf-2o-6Bh" firstAttribute="top" secondItem="zvx-Qh-TFB" secondAttribute="bottom" constant="20" id="iT3-8i-qxm"/>
+                            <constraint firstItem="zvx-Qh-TFB" firstAttribute="leading" secondItem="Tt6-ao-Hbj" secondAttribute="leadingMargin" id="uU8-wk-3sM"/>
                             <constraint firstItem="hKo-8c-dxn" firstAttribute="leading" secondItem="Tt6-ao-Hbj" secondAttribute="leadingMargin" id="wkT-3S-qN4"/>
                         </constraints>
                     </view>
@@ -96,7 +105,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bWO-Io-h6W" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1838" y="-2"/>
+            <point key="canvasLocation" x="1866.5" y="-2.5"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="3dk-L3-x2h">
@@ -152,7 +161,7 @@
                         <viewControllerLayoutGuide type="bottom" id="cAs-gF-4o6"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Zs4-9Z-03R">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <containerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="88P-yM-OTa">
