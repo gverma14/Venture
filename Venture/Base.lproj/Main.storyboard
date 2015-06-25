@@ -76,7 +76,7 @@
                                     <rect key="frame" x="16" y="64" width="237" height="492"/>
                                 </variation>
                             </view>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zvx-Qh-TFB">
+                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zvx-Qh-TFB">
                                 <color key="backgroundColor" red="0.36353786500000002" green="0.86042997259999998" blue="0.8318886861" alpha="1" colorSpace="calibratedRGB"/>
                                 <variation key="heightClass=compact-widthClass=compact" ambiguous="YES" misplaced="YES">
                                     <rect key="frame" x="16" y="380" width="368" height="26"/>
